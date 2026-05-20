@@ -19,9 +19,9 @@
 
       body {
         background:
-          url("foolscap.svg") repeat-y center top / 100% auto,
-          url("charcoalscribbles.svg") repeat-y center top / 100% auto,
-          url("inkblots.svg") repeat-y center top / 100% auto,
+          url("foolscap.png") repeat-y center top / 100% auto,
+          url("charcoalscribbles.png") repeat-y center top / 100% auto,
+          url("inkblots.jpg") repeat-y center top / 100% auto,
           #fff;
         color: #222;
         font-family: Georgia, "Times New Roman", serif;
@@ -37,7 +37,7 @@
         top: 0;
         width: 550px;
         height: 100%;
-        background: url("rough sides.svg") space;
+        background: url("rough sides.jpg") space;
         background-size: 100% 45vh;
         z-index: 1;
         pointer-events: none;
@@ -319,6 +319,28 @@
         position: relative;
         z-index: 5;
         margin-top: 60px;
+      }
+      /* ── MOBILE: reduce memory-heavy assets ── */
+      @media (max-width: 768px) {
+        body {
+          background:
+            url("foolscap.jpg") repeat-y center top / 100% auto,
+            #fff;
+        }
+        body::before,
+        body::after {
+          display: none;
+        }
+        .section {
+          margin-top: -30px;
+          padding: 20px 20px;
+          max-width: 100% !important;
+          margin-left: 10px !important;
+          margin-right: 10px !important;
+        }
+        #toc {
+          margin-top: -30px;
+        }
       }
     </style>
 
