@@ -7,6 +7,10 @@
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
     <script src="FixedActionScriptForAia_HTML5 Canvas_Scene 1.js"></script>
     <style>
+      @font-face {
+        font-family: "OneFont";
+        src: url("OneFont.otf") format("opentype");
+      }
       * {
         margin: 0;
         padding: 0;
@@ -31,10 +35,12 @@
       }
       #content {
         padding: 20px;
+        position: relative;
+        z-index: 2;
       }
       .section-heading {
-        font-family: "Courier New", Courier, monospace;
-        font-size: 24px;
+        font-family: "OneFont", "Courier New", Courier, monospace;
+        font-size: 30px;
         font-weight: bold;
         color: #ec2a90;
         text-transform: uppercase;
@@ -139,7 +145,6 @@
         width: 100%;
         background: #000;
         overflow: hidden;
-        z-index: -1;
       }
       #animation_container {
         position: relative;
