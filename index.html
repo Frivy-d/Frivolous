@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frivolous</title>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="FixedActionScriptForAia_HTML5 Canvas_Scene 1.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background:
+          url("foolscap.png") repeat-y center top / 100% auto,
+          url("charcoalscribbles.png") repeat-y center top / 100% auto,
+          url("inkblots.jpg") repeat-y center top / 100% auto,
+          #fff;
+        color: #222;
+        font-family: "Courier New", Courier, monospace;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* ── FULL-PAGE SIDE BORDERS ── */
+      body::before,
+      body::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 550px;
+        height: 100%;
+        background: url("rough sides.jpg") space;
+        background-size: 100% 45vh;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.7;
+      }
+      body::before {
+        left: 0;
+        transform-origin: left top;
+        transform: rotate(5deg);
+      }
+      body::after {
+        right: 0;
+        transform-origin: right top;
+        transform: scaleX(-1) rotate(5deg);
+      }
+
+      /* ── HEADER / CANVAS AREA ── */
+      #hero {
+        position: relative;
+        width: 100%;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        z-index: 2;
+      }
+
+      #animation_container {
+        position: relative;
+        background-color: rgba(255, 255, 255, 1);
+        width: 764px;
+        height: 445px;
+        z-index: 1;
+      }
+
+      #canvas {
+        position: absolute;
+        display: block;
+        background-color: rgba(255, 255, 255, 1);
+      }
+
+      #dom_overlay_container {
+        pointer-events: none;
+        overflow: hidden;
+        width: 764px;
+        height: 445px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+      }
+
+      /* sound toggle */
+      #sound-toggle {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        z-index: 10;
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+      #sound-toggle img {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* ── TABLE OF CONTENTS / NAV ── */
+      #toc {
+        text-align: center;
+        padding: 30px 20px 20px;
+        position: relative;
+        z-index: 3;
+        margin-top: -50px;
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #toc h2 {
+        font-size: 14px;
+        font-weight: normal;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        color: #ec2a90;
+      }
+      #toc nav a {
+        display: block;
+        font-size: 13px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #ec2a90;
+        text-decoration: none;
+        margin: 5px 0;
+        transition:
+          transform 0.3s ease,
+          color 0.2s;
+      }
+      #toc nav a:hover {
+        color: #ff40b0;
+        transform: rotate(20deg);
+      }
+
+      /* ── SECTIONS (collage / overlapping) ── */
+      .section {
+        position: relative;
+        padding: 40px 60px;
+        margin-top: -80px;
+        z-index: 1;
+      }
+      .section p {
+        background: rgba(255, 255, 255, 0.85);
+        display: inline;
+        padding: 2px 6px;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+      }
+
+      .section-heading {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 42px;
+        font-weight: bold;
+        color: #ec2a90;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 5;
+        line-height: 1.4;
+      }
+      .section-heading span {
+        display: inline-block;
+        transition: transform 0.3s ease;
+      }
+      .section-heading span:nth-child(3n + 1) {
+        transform: rotate(-8deg) translateY(4px);
+      }
+      .section-heading span:nth-child(3n + 2) {
+        transform: rotate(5deg) translateY(-6px);
+      }
+      .section-heading span:nth-child(3n + 3) {
+        transform: rotate(-3deg) translateY(2px);
+      }
+      .section-heading span:nth-child(5n + 1) {
+        transform: rotate(10deg) translateY(-3px);
+      }
+      .section-heading span:nth-child(5n + 4) {
+        transform: rotate(-12deg) translateY(7px);
+      }
+      .section-heading span:nth-child(7n) {
+        transform: rotate(7deg) translateY(-5px);
+      }
+      .section-heading span:nth-child(7n + 3) {
+        transform: rotate(-15deg) translateY(8px);
+      }
+      .section-heading span:nth-child(11n + 2) {
+        transform: rotate(14deg) translateY(-4px);
+      }
+      .section-heading .space {
+        width: 12px;
+      }
+
+      /* artist statement — left aligned, overlaps TOC */
+      #artist-statement {
+        max-width: 620px;
+        margin-left: 60px;
+        margin-top: -20px;
+        padding: 30px 40px;
+        z-index: 3;
+      }
+      #artist-statement .section-heading {
+        font-size: 36px;
+      }
+      #artist-statement .date {
+        font-style: italic;
+        color: #888;
+        margin-bottom: 16px;
+        font-size: 14px;
+      }
+      #artist-statement p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: #333;
+        margin-bottom: 12px;
+      }
+      #artist-statement p:nth-child(odd) {
+        padding-left: 18px;
+      }
+      #artist-statement p:nth-child(even) {
+        padding-left: 6px;
+        text-indent: 12px;
+      }
+
+      /* history — pushed right, overlaps artist statement */
+      #history {
+        margin-top: -120px;
+        margin-left: auto;
+        margin-right: 40px;
+        max-width: 500px;
+        text-align: right;
+        z-index: 2;
+      }
+      #history .section-heading {
+        font-size: 48px;
+      }
+      #history p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: #444;
+        padding-right: 14px;
+        text-indent: -8px;
+      }
+
+      /* new releases — pushed left, overlaps history */
+      #new-releases {
+        margin-top: -100px;
+        margin-left: 40px;
+        max-width: 520px;
+        z-index: 2;
+      }
+      #new-releases .section-heading {
+        font-size: 44px;
+      }
+      #new-releases p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: #444;
+        padding-left: 22px;
+        text-indent: -10px;
+      }
+
+      /* discography — pushed right */
+      #discography {
+        margin-top: -60px;
+        margin-left: auto;
+        margin-right: 60px;
+        max-width: 480px;
+        text-align: right;
+        z-index: 2;
+      }
+      #discography .section-heading {
+        font-size: 40px;
+      }
+      #discography p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: #444;
+        padding-right: 20px;
+        text-indent: 15px;
+      }
+
+      /* projects — pushed left */
+      #projects {
+        margin-top: -80px;
+        margin-left: 50px;
+        max-width: 500px;
+        z-index: 2;
+      }
+      #projects .section-heading {
+        font-size: 46px;
+      }
+      #projects p {
+        font-size: 14px;
+        line-height: 1.7;
+        color: #444;
+        padding-left: 10px;
+        text-indent: -14px;
+      }
+
+      /* footer */
+      footer {
+        text-align: center;
+        padding: 30px;
+        font-size: 12px;
+        color: #999;
+        background: rgba(17, 17, 17, 0.85);
+        position: relative;
+        z-index: 5;
+        margin-top: 60px;
+      }
+      /* ── MOBILE: reduce memory-heavy assets ── */
+      @media (max-width: 768px) {
+        body {
+          background:
+            url("foolscap.jpg") repeat-y center top / 100% auto,
+            #fff;
+        }
+        body::before,
+        body::after {
+          display: none;
+        }
+        .section {
+          margin-top: -30px;
+          padding: 20px 20px;
+          max-width: 100% !important;
+          margin-left: 10px !important;
+          margin-right: 10px !important;
+        }
+        #toc {
+          margin-top: -30px;
+        }
+      }
+    </style>
+
+    <script>
+      var canvas,
+        stage,
+        exportRoot,
+        anim_container,
+        dom_overlay_container,
+        fnStartAnimation;
+      function init() {
+        canvas = document.getElementById("canvas");
+        anim_container = document.getElementById("animation_container");
+        dom_overlay_container = document.getElementById(
+          "dom_overlay_container",
+        );
+        var comp = AdobeAn.getComposition("A2651A61BE074DB1BD51799916B9FBBD");
+        var lib = comp.getLibrary();
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", function (evt) {
+          handleFileLoad(evt, comp);
+        });
+        loader.addEventListener("complete", function (evt) {
+          handleComplete(evt, comp);
+        });
+        var lib = comp.getLibrary();
+        loader.loadManifest(lib.properties.manifest);
+      }
+      function handleFileLoad(evt, comp) {
+        var images = comp.getImages();
+        if (evt && evt.item.type == "image") {
+          images[evt.item.id] = evt.result;
+        }
+      }
+      function handleComplete(evt, comp) {
+        var lib = comp.getLibrary();
+        var ss = comp.getSpriteSheet();
+        var queue = evt.target;
+        var ssMetadata = lib.ssMetadata;
+        for (var i = 0; i < ssMetadata.length; i++) {
+          ss[ssMetadata[i].name] = new createjs.SpriteSheet({
+            images: [queue.getResult(ssMetadata[i].name)],
+            frames: ssMetadata[i].frames,
+          });
+        }
+        exportRoot = new lib.FixedActionScriptForAia_HTML5Canvas_Scene1();
+        stage = new lib.Stage(canvas);
+        stage.enableMouseOver();
+        fnStartAnimation = function () {
+          stage.addChild(exportRoot);
+          createjs.Ticker.framerate = lib.properties.fps;
+          createjs.Ticker.addEventListener("tick", stage);
+        };
+        AdobeAn.makeResponsive(false, "both", false, 1, [
+          canvas,
+          anim_container,
+          dom_overlay_container,
+        ]);
+        AdobeAn.compositionLoaded(lib.properties.id);
+        fnStartAnimation();
+      }
+
+      /* sound toggle */
+      var soundOn = false;
+      function toggleSound() {
+        soundOn = !soundOn;
+        var btn = document.getElementById("sound-icon");
+        btn.src = soundOn ? "soundon.svg" : "soundoff.svg";
+      }
+    </script>
+  </head>
+
+  <body onload="init()">
+    <!-- ══ HERO: Flash Canvas ══ -->
+    <section id="hero">
+      <div
+        id="animation_container"
+        style="
+          background-color: rgba(255, 255, 255, 1);
+          width: 764px;
+          height: 445px;
+        "
+      >
+        <canvas
+          id="canvas"
+          width="764"
+          height="445"
+          style="
+            position: absolute;
+            display: block;
+            background-color: rgba(255, 255, 255, 1);
+          "
+        ></canvas>
+        <div
+          id="dom_overlay_container"
+          style="
+            pointer-events: none;
+            overflow: hidden;
+            width: 764px;
+            height: 445px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: block;
+          "
+        ></div>
+      </div>
+
+      <button id="sound-toggle" onclick="toggleSound()">
+        <img id="sound-icon" src="soundoff.svg" alt="Toggle Sound" />
+      </button>
+    </section>
+
+    <!-- ══ TABLE OF CONTENTS ══ -->
+    <div id="toc">
+      <h2>Table of Contents</h2>
+      <nav>
+        <a href="#artist-statement">Artist Statement</a>
+        <a href="#history">History</a>
+        <a href="#new-releases">New Releases</a>
+        <a href="#discography">Discography</a>
+        <a href="#projects">Projects</a>
+      </nav>
+    </div>
+
+    <!-- ══ ARTIST STATEMENT ══ -->
+    <section id="artist-statement" class="section">
+      <div class="section-heading">
+        <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span
+        ><span>T</span><span class="space"></span><span>S</span><span>T</span
+        ><span>A</span><span>T</span><span>E</span><span>M</span><span>E</span
+        ><span>N</span><span>T</span>
+      </div>
+      <div class="date">May 15, 2026</div>
+      <p>
+        My inspiration for this project is born from a desire to weave two
+        divergent forces together: craft with the nerve of exploration. Magic
+        and impulse converge into a unified field by exploring the intersections
+        of chaotic coincidence and subtle historical traditions. Before I
+        proceed, two common objections should be raised: that not every
+        intuition can translate to crafted work — and yet certain works demand
+        exactly that tension.
+      </p>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+        euismod, urna eu tincidunt consectetur, nisi nisl aliquam nunc, eget
+        egestas est nisi sed turpis. Donec vitae sapien ut libero venenatis
+        faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus
+        tincidunt. Duis leo. Sed fringilla mauris sit amet nibh.
+      </p>
+      <p>
+        Ultimately, the work is a mode of reconciling the historic songwriting
+        tradition with modern collage sensibility, to illuminate the playfulness
+        of the human condition.
+      </p>
+    </section>
+
+    <!-- ══ HISTORY ══ -->
+    <section id="history" class="section">
+      <div class="section-heading">
+        <span>H</span><span>I</span><span>S</span><span>T</span><span>O</span
+        ><span>R</span><span>Y</span>
+      </div>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia
+        odio vitae vestibulum. Donec in efficitur leo. Fusce sed bibendum
+        sapien. Cras ultricies ligula sed magna dictum porta. Vestibulum ante
+        ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;
+        Pellentesque in ipsum id orci porta dapibus. Praesent sapien massa,
+        convallis a pellentesque nec, egestas non nisi. Curabitur aliquet quam
+        id dui posuere blandit.
+      </p>
+    </section>
+
+    <!-- ══ NEW RELEASES ══ -->
+    <section id="new-releases" class="section">
+      <div class="section-heading">
+        <span>N</span><span>E</span><span>W</span><span class="space"></span
+        ><span>R</span><span>E</span><span>L</span><span>E</span><span>A</span
+        ><span>S</span><span>E</span><span>S</span>
+      </div>
+      <p>
+        Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+        accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
+        illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+        explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
+        odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
+        voluptatem sequi nesciunt.
+      </p>
+    </section>
+
+    <!-- ══ DISCOGRAPHY ══ -->
+    <section id="discography" class="section">
+      <div class="section-heading">
+        <span>D</span><span>I</span><span>S</span><span>C</span><span>O</span
+        ><span>G</span><span>R</span><span>A</span><span>P</span><span>H</span
+        ><span>Y</span>
+      </div>
+      <p>
+        At vero eos et accusamus et iusto odio dignissimos ducimus qui
+        blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
+        et quas molestias excepturi sint occaecati cupiditate non provident,
+        similique sunt in culpa qui officia deserunt mollitia animi, id est
+        laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita
+        distinctio.
+      </p>
+    </section>
+
+    <!-- ══ PROJECTS ══ -->
+    <section id="projects" class="section">
+      <div class="section-heading">
+        <span>P</span><span>R</span><span>O</span><span>J</span><span>E</span
+        ><span>C</span><span>T</span><span>S</span>
+      </div>
+      <p>
+        Temporibus autem quibusdam et aut officiis debitis aut rerum
+        necessitatibus saepe eveniet ut et voluptates repudiandae sint et
+        molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente
+        delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut
+        perferendis doloribus asperiores repellat. Nam libero tempore, cum
+        soluta nobis est eligendi optio cumque nihil impedit.
+      </p>
+    </section>
+
+    <footer>&copy; 2026 Frivolous</footer>
+  </body>
+</html>
