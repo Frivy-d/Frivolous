@@ -57,7 +57,7 @@
         font-family: "OneFont", "Courier Prime", Courier, monospace;
         font-size: 5vw;
         font-weight: bold;
-        color: #ec2a90;
+        color: #ff00ff;
         text-transform: uppercase;
         margin-bottom: 20px;
         line-height: 1.4;
@@ -98,7 +98,7 @@
       p {
         font-size: 16px;
         line-height: 1.4;
-        color: #ec2a90;
+        color: #ff00ff;
         font-weight: bold;
         background: rgba(255, 255, 255, 0.9);
         display: inline;
@@ -129,14 +129,14 @@
         letter-spacing: -2px;
         text-transform: uppercase;
         margin-bottom: 14px;
-        color: #ec2a90;
+        color: #ff00ff;
       }
       #toc nav a {
         display: block;
         font-size: clamp(13px, 4vw, 26px);
         letter-spacing: 1.5px;
         text-transform: uppercase;
-        color: #ec2a90;
+        color: #ff00ff;
         text-decoration: none;
         margin: 5px 0;
         transition: transform 0.2s ease;
@@ -239,13 +239,18 @@
         dom_overlay_container,
         fnStartAnimation;
       function init() {
+        console.log("init called");
         canvas = document.getElementById("canvas");
+        console.log("canvas:", canvas);
         anim_container = document.getElementById("animation_container");
         dom_overlay_container = document.getElementById(
           "dom_overlay_container",
         );
+        console.log("AdobeAn:", typeof AdobeAn);
         var comp = AdobeAn.getComposition("A2651A61BE074DB1BD51799916B9FBBD");
+        console.log("comp:", comp);
         var lib = comp.getLibrary();
+        console.log("lib:", lib);
         var loader = new createjs.LoadQueue(false);
         loader.addEventListener("fileload", function (evt) {
           handleFileLoad(evt, comp);
