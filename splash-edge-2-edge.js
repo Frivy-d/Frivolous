@@ -16796,7 +16796,7 @@
     opacity: 1.0,
     manifest: [
       {
-        src: "assets-guy/images/splash_edge_2_edge_atlas_1.png",
+        src: "splash_edge_2_edge_atlas_1.png",
         id: "splash_edge_2_edge_atlas_1",
       },
     ],
