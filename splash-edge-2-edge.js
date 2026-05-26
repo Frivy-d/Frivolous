@@ -10671,7 +10671,7 @@
 
     // Layer 1
     this.shape = new cjs.Shape();
-    this.shape.graphics.f("rgba(1,1,1,0)").s().p("AhgDLIAAmVIDBAAIAAGVg");
+    this.shape.graphics.f("rgba(1,1,1,0.1)").s().p("AhgDLIAAmVIDBAAIAAGVg");
 
     this.instance = new lib.Symbol298();
 
@@ -10682,6 +10682,7 @@
         .wait(1),
     );
 
+    this.stop(); // Stop at frame 0 for ButtonHelper to work
     this._renderFirstFrame();
   }).prototype = p = new cjs.MovieClip();
   p.nominalBounds = new cjs.Rectangle(-9.7, -175.4, 176.2, 195.70000000000002);
@@ -13911,7 +13912,7 @@
 
     // Layer 1
     this.instance = new lib.Symbol275("synched", 0);
-    this.instance.alpha = 0;
+    this.instance.alpha = 0.1; // Visible for button clickability
 
     this.instance_1 = new lib.Symbol277();
 
@@ -13922,6 +13923,7 @@
         .wait(1),
     );
 
+    this.stop(); // Stop at frame 0 for ButtonHelper to work
     this._renderFirstFrame();
   }).prototype = p = new cjs.MovieClip();
   p.nominalBounds = new cjs.Rectangle(-226.9, -103.7, 192.2, 153.2);
