@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Button Test - Actual Symbol273</title>
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #f0f0f0;
+      }
+      canvas {
+        background: white;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="400" height="300"></canvas>
+    <script>
+      var canvas, stage, exportRoot;
+
+      function init() {
+        canvas = document.getElementById("canvas");
+        stage = new createjs.Stage(canvas);
+        createjs.Touch.enable(stage);
+
+        // Library setup (mimicking actual export structure)
+        var lib = {};
+        var p;
+
+        // Symbol272 (normal state - simple visible rectangle)
+        lib.Symbol272 = function () {
+          createjs.MovieClip.apply(this);
+          this.shape = new createjs.Shape();
+          this.shape.graphics.f("#666666").s().dr(-50, -25, 100, 50);
+          this.timeline.addTween(createjs.Tween.get(this.shape).wait(1));
+          this._renderFirstFrame();
+        };
+        lib.Symbol272.prototype = p = new createjs.MovieClip();
+        p.nominalBounds = new createjs.Rectangle(-50, -25, 100, 50);
+
+        // Symbol249 (bubblebath animation - simplified placeholder)
+        lib.Symbol249 = function () {
+          createjs.MovieClip.apply(this);
+          this.shape = new createjs.Shape();
+          this.shape.graphics.f("#0000FF").s().dr(0, 0, 50, 50);
+          this.timeline.addTween(createjs.Tween.get(this.shape).wait(120));
+          this._renderFirstFrame();
+        };
+        lib.Symbol249.prototype = p = new createjs.MovieClip();
+        p.nominalBounds = new createjs.Rectangle(0, 0, 50, 50);
+
+        // Symbol274 (hover state - from actual export structure)
+        lib.Symbol274 = function () {
+          createjs.MovieClip.apply(this);
+          this.instance = new lib.Symbol249();
+          this.instance.setTransform(35.05, -104.9);
+          this.timeline.addTween(createjs.Tween.get(this.instance).wait(120));
+          this.instance_1 = new lib.Symbol272();
+          this.instance_1.alpha = 0;
+          this.timeline.addTween(createjs.Tween.get(this.instance_1).wait(120));
+          this._renderFirstFrame();
+        };
+        lib.Symbol274.prototype = p = new createjs.MovieClip();
+        p.nominalBounds = new createjs.Rectangle(-299, -239.8, 465.8, 342.3);
+
+        // Symbol273 (the button - from actual export structure)
+        lib.Symbol273 = function () {
+          createjs.MovieClip.apply(this);
+          this.instance = new lib.Symbol272();
+          this.instance.alpha = 1; // Make visible for testing
+          this.instance_1 = new lib.Symbol274();
+          this.timeline.addTween(
+            createjs.Tween.get({})
+              .to({ state: [{ t: this.instance }] })
+              .to({ state: [{ t: this.instance_1 }] }, 1)
+              .wait(1),
+          );
+          this.stop();
+          this._renderFirstFrame();
+        };
+        lib.Symbol273.prototype = p = new createjs.MovieClip();
+        p.nominalBounds = new createjs.Rectangle(-299, -71.2, 298.2, 173.7);
+
+        // Create button instance
+        exportRoot = new lib.Symbol273();
+        exportRoot.x = 200;
+        exportRoot.y = 150;
+
+        // Add ButtonHelper (same as actual export)
+        new createjs.ButtonHelper(exportRoot, 0, 1, 1);
+
+        stage.addChild(exportRoot);
+
+        // Add debug logging
+        exportRoot.on("mouseover", function () {
+          console.log("Mouseover - frame:", this.currentFrame);
+        });
+        exportRoot.on("mousedown", function () {
+          console.log("Mousedown - frame:", this.currentFrame);
+        });
+        exportRoot.on("click", function () {
+          console.log("Click - frame:", this.currentFrame);
+        });
+
+        createjs.Ticker.framerate = 60;
+        createjs.Ticker.addEventListener("tick", stage);
+      }
+
+      init();
+    </script>
+  </body>
+</html>
