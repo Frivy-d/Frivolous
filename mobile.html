@@ -218,10 +218,15 @@
         background: none;
         border: none;
         padding: 0;
-        opacity: 0.7;
-        transition: opacity 0.2s ease;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
       }
-      #scroll-to-top:hover {
+      #scroll-to-top.visible {
+        opacity: 0.7;
+        pointer-events: auto;
+      }
+      #scroll-to-top.visible:hover {
         opacity: 1;
       }
       #scroll-to-top img {
@@ -363,6 +368,13 @@
           scrollToTopBtn.addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
           });
+          window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+              scrollToTopBtn.classList.add("visible");
+            } else {
+              scrollToTopBtn.classList.remove("visible");
+            }
+          });
         }
       });
     </script>
@@ -395,22 +407,24 @@
         </nav>
       </div>
 
-      <div class="section-heading">
-        <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span
-        ><span>T</span><span class="space"></span><span>S</span><span>T</span
-        ><span>A</span><span>T</span><span>E</span><span>M</span><span>E</span
-        ><span>N</span><span>T</span>
+      <div class="section" id="artist-statement">
+        <div class="section-heading">
+          <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span
+          ><span>T</span><span class="space"></span><span>S</span><span>T</span
+          ><span>A</span><span>T</span><span>E</span><span>M</span><span>E</span
+          ><span>N</span><span>T</span>
+        </div>
+        <p>
+          My inspiration for the project Frivolous is to retain my innocent
+          fascination with the genre of Electronic Music and engage a naive
+          spirit that communicates through the integration of multi-contextual
+          and multi-historical influences. Ideas of sound re-contextualization
+          (sampling) are used to create unorthodox narratives in unified sonic
+          spatial environments. Although the music can often be danceable, the
+          intention is to provoke mystery and musical questions in the listener
+          as I seek to illuminate the playfulness of the human condition.
+        </p>
       </div>
-      <p>
-        My inspiration for the project Frivolous is to retain my innocent
-        fascination with the genre of Electronic Music and engage a naive spirit
-        that communicates through the integration of multi-contextual and
-        multi-historical influences. Ideas of sound re-contextualization
-        (sampling) are used to create unorthodox narratives in unified sonic
-        spatial environments. Although the music can often be danceable, the
-        intention is to provoke mystery and musical questions in the listener as
-        I seek to illuminate the playfulness of the human condition.
-      </p>
 
       <div class="section right" id="history">
         <div class="section-heading">
