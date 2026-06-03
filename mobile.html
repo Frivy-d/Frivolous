@@ -207,6 +207,32 @@
         width: 100%;
         height: 100%;
       }
+      #scroll-to-top {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        z-index: 10;
+        cursor: pointer;
+        width: 10vw;
+        height: 10vw;
+        background: none;
+        border: none;
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      #scroll-to-top.visible {
+        opacity: 0.7;
+        pointer-events: auto;
+      }
+      #scroll-to-top.visible:hover {
+        opacity: 1;
+      }
+      #scroll-to-top img {
+        width: 100%;
+        height: 100%;
+      }
       /* Add center background layers on phone only */
       @media (max-width: 768px) {
         body {
@@ -336,6 +362,20 @@
             }
           });
         });
+
+        var scrollToTopBtn = document.getElementById("scroll-to-top");
+        if (scrollToTopBtn) {
+          scrollToTopBtn.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+          window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+              scrollToTopBtn.classList.add("visible");
+            } else {
+              scrollToTopBtn.classList.remove("visible");
+            }
+          });
+        }
       });
     </script>
   </head>
@@ -350,6 +390,10 @@
       </button>
     </section>
 
+    <button id="scroll-to-top">
+      <img src="toplog.svg" alt="Scroll to top" />
+    </button>
+
     <div id="content">
       <div id="toc">
         <h2>Table of Contents</h2>
@@ -363,22 +407,24 @@
         </nav>
       </div>
 
-      <div class="section-heading">
-        <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span
-        ><span>T</span><span class="space"></span><span>S</span><span>T</span
-        ><span>A</span><span>T</span><span>E</span><span>M</span><span>E</span
-        ><span>N</span><span>T</span>
+      <div class="section" id="artist-statement">
+        <div class="section-heading">
+          <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span
+          ><span>T</span><span class="space"></span><span>S</span><span>T</span
+          ><span>A</span><span>T</span><span>E</span><span>M</span><span>E</span
+          ><span>N</span><span>T</span>
+        </div>
+        <p>
+          My inspiration for the project Frivolous is to retain my innocent
+          fascination with the genre of Electronic Music and engage a naive
+          spirit that communicates through the integration of multi-contextual
+          and multi-historical influences. Ideas of sound re-contextualization
+          (sampling) are used to create unorthodox narratives in unified sonic
+          spatial environments. Although the music can often be danceable, the
+          intention is to provoke mystery and musical questions in the listener
+          as I seek to illuminate the playfulness of the human condition.
+        </p>
       </div>
-      <p>
-        My inspiration for the project Frivolous is to retain my innocent
-        fascination with the genre of Electronic Music and engage a naive spirit
-        that communicates through the integration of multi-contextual and
-        multi-historical influences. Ideas of sound re-contextualization
-        (sampling) are used to create unorthodox narratives in unified sonic
-        spatial environments. Although the music can often be danceable, the
-        intention is to provoke mystery and musical questions in the listener as
-        I seek to illuminate the playfulness of the human condition.
-      </p>
 
       <div class="section right" id="history">
         <div class="section-heading">
