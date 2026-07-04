@@ -124,8 +124,9 @@
         padding-left: 6px;
         text-indent: 12px;
       }
+      /* Move table-of-contents down so it doesn't overlap hero/animation */
       #toc {
-        margin-top: -45px;
+        margin-top: 20px; /* was -45px */
         text-align: center;
         padding: 0px 20px 20px;
         margin-left: auto;
@@ -144,6 +145,7 @@
           0 0 5.7px rgba(255, 0, 255, 0.67),
           0 0 11.4px rgba(255, 0, 255, 0.48);
       }
+      /* Allow nav links to wrap consistently across browsers and devices */
       #toc nav a {
         display: block;
         font-size: clamp(13px, 4vw, 26px);
@@ -156,6 +158,9 @@
         text-shadow: 
           0 0 5.7px rgba(255, 0, 255, 0.67),
           0 0 11.4px rgba(255, 0, 255, 0.48);
+        white-space: normal; /* allow wrapping */
+        overflow-wrap: anywhere; /* allow break inside words if needed */
+        word-break: break-word;
       }
       #toc nav a:hover {
         transform: scale(1.25) rotate(15deg);
@@ -269,6 +274,14 @@
             url("foolscap.png") no-repeat center center / 100% auto,
             url("foolscap.png") no-repeat center bottom / 100% auto,
             #fff;
+        }
+        /* give extra space on small screens to ensure no overlap */
+        #toc {
+          margin-top: 40px;
+        }
+        #toc nav a {
+          white-space: normal;
+          overflow-wrap: anywhere;
         }
       }
     </style>
@@ -405,9 +418,10 @@
     <button id="scroll-to-top"> <img src="toplog2.svg" alt="Scroll to top"> </button>
     <div id="content">
       <div id="toc">
-        <nav> <a href="#artist-statement">Artist Statement</a> <a href="#history">History</a>
+        <h2>Table of Contents</h2>
+        <nav> <a href="#artist-statement">Artist<wbr> Statement</a> <a href="#history">History</a>
           <a href="#new-releases">New Releases</a> <a href="#discography">Discography</a>
-          <a href="#live-performance">Live Performance</a> <a href="#projects">Projects</a>
+          <a href="#live-performance">Live<wbr> Performance</a> <a href="#projects">Projects</a>
         </nav>
       </div>
       <div class="section" id="artist-statement">
@@ -465,38 +479,6 @@
           offered me the opportunity to do something productive during the
           Pandemic and the chance to return to Europe after almost 10 years of
           living back in Canada. </p>
-        <p> I came to this program at Catalyst with many metaphorical demons in
-          my closet - these were topics which I was growing more and more
-          uncomfortable with in the evolving landscape of music production,
-          especially as it played-out between 2008-2018. Thankfully the Masters
-          Degree program taught me how to conduct an Academic- and
-          Practice-based research approach to dealing with these concerns which
-          did certainly help me exorcise those demons. I could finally make an
-          academic assertion for my growing discomfort regarding the music of
-          this time. Mainly that the tools being used to achieve LOUDNESS in
-          recorded music was also killing the producers ability to create
-          "reality-based space". I then conducted a material study (more
-          artistic than scientific) to determine if the music of this time
-          (which was becoming known to many technicians as "the loudness war
-          period") was not only evolving in an aesthetic way, but doing so in
-          direct conversation with the "reality" of acoustic spatial design.
-          Playing with these ideas of reality or, at least, referencing the
-          human-being's experience in sound design had up to this point been
-          ubiquitous in sound-engineering and recordings made up until around
-          2008 in almost every genre including Electronic Music. After which
-          time it seemed engineers were placing less emphasis (consciously or
-          unconsciously) on "reality-based" spatial acoustic modeling techniques
-          in favour of fragmented or "hyper-reality" spatial dimensions. This
-          led to the question: was the competition for loudness impeding music's
-          ability to convey the human-experience or, perhaps in parallel, does a
-          new sonic "hyper-reality" allow listeners a new prospectus: to escape
-          (rather than be reminded of) the reality of resentful human decline. I
-          do not wish to focus on the darkness of this prospect and although I
-          do try to remain unbiased and use my production tools in a way that
-          makes listeners simply enjoy music - I will say that I certainly have
-          a bias towards one of the two options. Let's make this fun! Can you
-          tell which one? (reality or hyper-reality based sound design?) I would
-          let my listeners determine this for themselves. </p>
       </div>
       <div class="section" id="new-releases">
         <div class="section-heading"> <span>N</span><span>E</span><span>W</span><span
@@ -518,45 +500,14 @@
           2024 (self-release) <a href="https://the-real-frivolous.bandcamp.com/album/the-wonder-of-the-feeler-ep"
             target="_blank">Frivolous
             - The Wonder of the Feeler</a> (single)<br>
-          <br>
-          2024 (URSL) Jan Mir, Paul Sandberg, Tomas Svensson - <a href="https://urslrecords.bandcamp.com/track/cans-coffee-frivolous-remix"
-            target="_blank">Cans
-            &amp; Coffee (Frivolous Remix)</a><br>
-          <br>
-          2023 (Compost Records) Frivolous - <a href="https://compostrecords.bandcamp.com/album/psycho-acoustic-principles-for-the-dancefloor-ep"
-            target="_blank">Psycho
-            Acoustic Principles for the Dancefloor EP</a><br>
-          <br>
-          2023 (Compost Records) Felix Labande - <a href="https://felixlaband.bandcamp.com/track/we-know-major-toms-a-junkie-frivolous-remix"
-            target="_blank">We
-            Know Major Tom's A Junkie (Frivolous Remix)</a><br>
-          <br>
-          2022 (Bar 25 Music) Frivolous - <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-bar25-176"
-            target="_blank">The
-            Tiny House of Delusion (Album)</a><br>
-          <br>
-          2022 (Bar 25 Music) Frivolous - <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179https://bar25music.bandcamp.com/album/frivolous-the-[...]"
-            target="_blank">The
-            Tiny House of Delusion (Remixes)<br>
-          </a><br>
-          <br>
-          2022 (LNDKHN) Kermesse / Landikhan - <a href="https://soundcloud.com/frivolous/kermesse-space-time-frivolous-remix"
-            target="_blank">Space
-            &amp; Time (Frivolous Remix)</a><br>
-          <br>
-          2020 (Otake Records) <a href="https://soundcloud.com/otakerecords/sets/frivolous-release-paralysis-otake-033"
-            target="_blank">Frivolous
-            - Release Paralysis EP</a> </p>
+        </p>
       </div>
       <div class="section right" id="discography">
         <div class="section-heading"> <span>D</span><span>I</span><span>S</span><span>C</span><span>O</span><span>G</span><span>R</span><span>A</span><span>P</span><span>H</span><span>Y</span>
         </div>
-        <a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">
-        </a>
         <p><b><a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">Almost
               (nearly) complete discography @ Discogs.com</a></b></p>
-        <a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">
-        </a></div>
+      </div>
       <div class="section" id="live-performance">
         <div class="section-heading"> <span>L</span><span>I</span><span>V</span><span>E</span><span
             class="space"></span><span>P</span><span>E</span><span>R</span><span>F</span><span>O</span><span>R</span><span>M</span><span>A</span><span>N</span><span>C</span><span>E</span>
@@ -579,13 +530,6 @@
           sonic and performance explorations remain the primary focus. If you
           have such an event planned and would like to invite Frivolous (Live)
           please reach out to Ulrike Schmeisser uli@uliversum-booking.de </p>
-        <p>Upcoming Performances: found on my Soundcloud page</p>
-        <p> Note-worthy past performances of Frivolous live include: The Frisky
-          Whisker - Atlanta (GA), Montréal Jazz Festival, Sub-Sahara (SA),
-          Montreux Jazz Festival, CMYK - Boulder (CO), Vagabundos Ibiza,
-          Kazantip Festival, CTM/Club Transmediale, MUTEK Festival, Fusion
-          Festival, Awakenings/ADE, Miami Winter Music Conference, Panorama
-          Bar/Berghain, Fabric London, DAT Music Conference - Missoula (MT) </p>
       </div>
       <div class="section" id="projects">
         <div class="section-heading"> <span>P</span><span>R</span><span>O</span><span>J</span><span>E</span><span>C</span><span>T</span><span>S</span>
