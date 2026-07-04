@@ -63,6 +63,12 @@
         text-transform: uppercase;
         margin-bottom: 20px;
         line-height: 1.4;
+        text-shadow: 
+          0 0 7.6px rgba(255, 0, 255, 0.76),
+          0 0 15.2px rgba(255, 0, 255, 0.57),
+          0 0 22.8px rgba(255, 0, 255, 0.38),
+          -2px -2px 4px rgba(0, 0, 0, 0.5),
+          2px 2px 4px rgba(0, 0, 0, 0.5);
       }
       .section-heading span {
         display: inline-block;
@@ -102,12 +108,14 @@
         line-height: 1.4;
         color: #ff00ff;
         font-weight: regular;
-        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.2);
         display: inline;
-        padding: 2px 6px;
+        padding: 4px 8px;
         box-decoration-break: clone;
         -webkit-box-decoration-break: clone;
         margin-bottom: 12px;
+        border-radius: 2px;
       }
       p:nth-child(odd) {
         padding-left: 18px;
@@ -132,6 +140,9 @@
         text-transform: uppercase;
         margin-bottom: 14px;
         color: #ff00ff;
+        text-shadow: 
+          0 0 5.7px rgba(255, 0, 255, 0.67),
+          0 0 11.4px rgba(255, 0, 255, 0.48);
       }
       #toc nav a {
         display: block;
@@ -142,6 +153,9 @@
         text-decoration: none;
         margin: 5px 0;
         transition: transform 0.2s ease;
+        text-shadow: 
+          0 0 5.7px rgba(255, 0, 255, 0.67),
+          0 0 11.4px rgba(255, 0, 255, 0.48);
       }
       #toc nav a:hover {
         transform: scale(1.25) rotate(15deg);
