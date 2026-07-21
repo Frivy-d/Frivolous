@@ -16884,6 +16884,7 @@
       lastH,
       lastS = 1;
     window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("orientationchange", resizeCanvas);
     resizeCanvas();
     function resizeCanvas() {
       var w = lib.properties.width,
