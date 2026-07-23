@@ -16476,6 +16476,32 @@
 
     this.timeline.addTween(cjs.Tween.get(this.instance_4).wait(120));
 
+    // Sound triggers for overlay button animations
+    var overlayButtons = [
+      { inst: this.instance, over: "bg1" },
+      { inst: this.instance_1, over: "bg1" },
+      { inst: this.instance_3, over: "bg2" },
+      { inst: this.instance_4, over: "bg2" },
+    ];
+    for (var i = 0; i < overlayButtons.length; i++) {
+      (function (btn) {
+        btn.inst.on("mouseover", function () {
+          if (typeof window !== "undefined" && window.soundOn && cjs.Sound) {
+            if (btn.inst.__overlaySound && btn.inst.__overlaySound.stop) {
+              btn.inst.__overlaySound.stop();
+            }
+            btn.inst.__overlaySound = cjs.Sound.play(btn.over);
+          }
+        });
+        btn.inst.on("mouseout", function () {
+          if (btn.inst.__overlaySound && btn.inst.__overlaySound.stop) {
+            btn.inst.__overlaySound.stop();
+            btn.inst.__overlaySound = null;
+          }
+        });
+      })(overlayButtons[i]);
+    }
+
     this._renderFirstFrame();
   }).prototype = p = new cjs.MovieClip();
   p.nominalBounds = new cjs.Rectangle(-321.6, -223.8, 426.20000000000005, 313);
@@ -16789,7 +16815,7 @@
   // library properties:
   lib.properties = {
     id: "A2651A61BE074DB1BD51799916B9FBBD",
-    width: 615,
+    width: 614,
     height: 445,
     fps: 35,
     color: "#FFFFFF",
@@ -16802,6 +16828,11 @@
     ],
     preloads: [],
   };
+
+  // Register overlay button sound files
+  cjs.Sound.alternateExtensions = ["mp3"];
+  cjs.Sound.registerSound("Website Sounds/BG 1-RF 3.mp3", "bg1");
+  cjs.Sound.registerSound("Website Sounds/BG2.mp3", "bg2");
 
   // bootstrap callback support:
 
