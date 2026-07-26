@@ -10671,7 +10671,7 @@
 
     // Layer 1
     this.shape = new cjs.Shape();
-    this.shape.graphics.f("rgba(1,1,1,0.1)").s().p("AhgDLIAAmVIDBAAIAAGVg");
+    this.shape.graphics.f("rgba(0,0,0,0.1)").s().dr(-9.7, -35.4, 34, 70.7);
 
     this.instance = new lib.Symbol298();
 
@@ -10685,7 +10685,7 @@
     this.stop(); // Stop at frame 0 for ButtonHelper to work
     this._renderFirstFrame();
   }).prototype = p = new cjs.MovieClip();
-  p.nominalBounds = new cjs.Rectangle(-9.7, -175.4, 176.2, 195.70000000000002);
+  p.nominalBounds = new cjs.Rectangle(-9.7, -35.4, 34, 70.7);
 
   (lib.Symbol294 = function (mode, startPosition, loop, reversed) {
     if (loop == null) {
@@ -13911,14 +13911,14 @@
     cjs.MovieClip.apply(this, [props]);
 
     // Layer 1
-    this.instance = new lib.Symbol275("synched", 0);
-    this.instance.alpha = 0.1; // Visible for button clickability
+    this.shape = new cjs.Shape();
+    this.shape.graphics.f("rgba(0,0,0,0.1)").s().dr(-226.9, -33.7, 35.2, 103.2);
 
     this.instance_1 = new lib.Symbol277();
 
     this.timeline.addTween(
       cjs.Tween.get({})
-        .to({ state: [{ t: this.instance }] })
+        .to({ state: [{ t: this.shape }] })
         .to({ state: [{ t: this.instance_1 }] }, 1)
         .wait(1),
     );
@@ -13990,14 +13990,14 @@
     cjs.MovieClip.apply(this, [props]);
 
     // Layer 1
-    this.instance = new lib.Symbol272("synched", 0);
-    this.instance.alpha = 0.1; // Visible for button clickability
+    this.shape = new cjs.Shape();
+    this.shape.graphics.f("rgba(0,0,0,0.1)").s().dr(-310, 40, 35.2, 70.7);
 
     this.instance_1 = new lib.Symbol274();
 
     this.timeline.addTween(
       cjs.Tween.get({})
-        .to({ state: [{ t: this.instance }] })
+        .to({ state: [{ t: this.shape }] })
         .to({ state: [{ t: this.instance_1 }] }, 1)
         .wait(1),
     );
@@ -16392,6 +16392,35 @@
     369.79999999999995,
   );
 
+  (lib.SymbolHouseBtn2 = function (mode, startPosition, loop, reversed) {
+    if (loop == null) {
+      loop = true;
+    }
+    if (reversed == null) {
+      reversed = false;
+    }
+    var props = new Object();
+    props.mode = mode;
+    props.startPosition = startPosition;
+    props.labels = {};
+    props.loop = loop;
+    props.reversed = reversed;
+    cjs.MovieClip.apply(this, [props]);
+
+    // Layer 1
+    this.shape = new cjs.Shape();
+    this.shape.graphics.f("rgba(0,0,0,0.1)").s().dr(-15, -40, 34, 70);
+
+    this.timeline.addTween(
+      cjs.Tween.get({})
+        .to({ state: [{ t: this.shape }] })
+        .wait(1),
+    );
+
+    this._renderFirstFrame();
+  }).prototype = p = new cjs.MovieClip();
+  p.nominalBounds = new cjs.Rectangle(-10, -10, 20, 40);
+
   (lib.Symbol300 = function (mode, startPosition, loop, reversed) {
     if (loop == null) {
       loop = true;
@@ -16476,27 +16505,33 @@
 
     this.timeline.addTween(cjs.Tween.get(this.instance_4).wait(120));
 
-    // Sound triggers for overlay button animations
+    // House
+    this.instance_5 = new lib.SymbolHouseBtn2();
+    this.instance_5.setTransform(-157.75, 70);
+
+    this.timeline.addTween(cjs.Tween.get(this.instance_5).wait(120));
+
+    var batHouse = this.instance;
+    this.instance_5.on("mouseover", function () {
+      batHouse.gotoAndStop(1);
+    });
+    this.instance_5.on("mouseout", function () {
+      batHouse.gotoAndStop(0);
+    });
+
+    // Sound triggers for overlay button animations (via Tone.js frivSound)
     var overlayButtons = [
-      { inst: this.instance, over: "bg1" },
-      { inst: this.instance_1, over: "bg1" },
-      { inst: this.instance_3, over: "bg2" },
-      { inst: this.instance_4, over: "bg2" },
+      { inst: this.instance, bg: "bg1" },
+      { inst: this.instance_1, bg: "bg1" },
+      { inst: this.instance_3, bg: "bg2" },
+      { inst: this.instance_4, bg: "bg2" },
+      { inst: this.instance_5, bg: "bg1" },
     ];
     for (var i = 0; i < overlayButtons.length; i++) {
       (function (btn) {
         btn.inst.on("mouseover", function () {
-          if (typeof window !== "undefined" && window.soundOn && cjs.Sound) {
-            if (btn.inst.__overlaySound && btn.inst.__overlaySound.stop) {
-              btn.inst.__overlaySound.stop();
-            }
-            btn.inst.__overlaySound = cjs.Sound.play(btn.over);
-          }
-        });
-        btn.inst.on("mouseout", function () {
-          if (btn.inst.__overlaySound && btn.inst.__overlaySound.stop) {
-            btn.inst.__overlaySound.stop();
-            btn.inst.__overlaySound = null;
+          if (typeof window !== "undefined" && window.frivSound) {
+            window.frivSound.playBG(btn.bg);
           }
         });
       })(overlayButtons[i]);
@@ -16828,11 +16863,6 @@
     ],
     preloads: [],
   };
-
-  // Register overlay button sound files
-  cjs.Sound.alternateExtensions = ["mp3"];
-  cjs.Sound.registerSound("Website Sounds/BG 1-RF 3.mp3", "bg1");
-  cjs.Sound.registerSound("Website Sounds/BG2.mp3", "bg2");
 
   // bootstrap callback support:
 

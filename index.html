@@ -22,6 +22,7 @@
       rel="stylesheet"
     />
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script src="splash-edge-2-edge.js"></script>
     <style>
       @font-face {
@@ -43,11 +44,8 @@
       }
       body {
         background:
-          url("charcoalscribbles.png") no-repeat center top / 100% auto,
           url("charcoalscribbles-03.png") no-repeat right 20px top / 40% auto,
           url("charcoalscribbles-03.png") no-repeat right 20px bottom / 40% auto,
-          url("charcoalscribbles.png") no-repeat center top / 100% auto,
-          url("charcoalscribbles.png") no-repeat center bottom / 100% auto,
           url("inkblots.jpg") no-repeat center top / 100% auto,
           url("inkblots.jpg") no-repeat center bottom / 100% auto,
           url("foolscap.png") no-repeat center top / 100% auto,
@@ -211,6 +209,16 @@
         display: block;
         background-color: rgba(255, 255, 255, 1);
       }
+      #animation_container::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 100%;
+        background: #000;
+        z-index: 2;
+      }
       #dom_overlay_container {
         pointer-events: none;
         overflow: hidden;
@@ -226,8 +234,8 @@
         left: 10px;
         z-index: 10;
         cursor: pointer;
-        width: 40px;
-        height: 40px;
+        width: 46px;
+        height: 46px;
         background: none;
         border: none;
         padding: 0;
@@ -266,15 +274,11 @@
       @media (max-width: 768px) {
         body {
           background:
-            url("charcoalscribbles.png") no-repeat center top / 100% auto,
             url("charcoalscribbles-03.png") no-repeat right 20px top / 40% auto,
             url("charcoalscribbles-03.png") no-repeat right 20px center / 40%
               auto,
             url("charcoalscribbles-03.png") no-repeat right 20px bottom / 40%
               auto,
-            url("charcoalscribbles.png") no-repeat center top / 100% auto,
-            url("charcoalscribbles.png") no-repeat center center / 100% auto,
-            url("charcoalscribbles.png") no-repeat center bottom / 100% auto,
             url("inkblots.jpg") no-repeat center top / 100% auto,
             url("inkblots.jpg") no-repeat center center / 100% auto,
             url("inkblots.jpg") no-repeat center bottom / 100% auto,
@@ -347,10 +351,10 @@
         ]);
         AdobeAn.compositionLoaded(lib.properties.id);
         fnStartAnimation();
-        scaleHero();
+        // scaleHero();
       }
 
-      function scaleHero() {
+      /* function scaleHero() {
         var cw = 614,
           ch = 445;
         var max_width = 860;
@@ -365,13 +369,105 @@
         ac.style.marginLeft = "-" + cw / 2 + "px";
         hero.style.height = Math.floor(ch * s) + "px";
       }
-      window.addEventListener("resize", scaleHero);
+      window.addEventListener("resize", scaleHero); */
 
       var soundOn = false;
+
+      // ── Tone.js Sound Manager ──
+      var frivSound = {
+        LOOP_DURATION: 7.941,
+        players: {},
+        activeBG: null,
+        activeLoop: null,
+        bgStartTime: 0,
+        ready: false,
+
+        init: function () {
+          var self = this;
+          this.players.bg1 = new Tone.Player({
+            url: "websounds/bg1-rf3.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.bg2 = new Tone.Player({
+            url: "websounds/BG2.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.loop1 = new Tone.Player({
+            url: "websounds/Loop1.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.loop2 = new Tone.Player({
+            url: "websounds/Loop2.mp3",
+            loop: true,
+          }).toDestination();
+          Tone.loaded().then(function () {
+            self.ready = true;
+          });
+        },
+
+        ensureContext: function () {
+          if (Tone.context.state !== "running") {
+            Tone.start();
+          }
+        },
+
+        playBG: function (id) {
+          if (!window.soundOn || !this.ready) return;
+          this.ensureContext();
+          if (this.activeBG === id) return;
+          this.players.bg1.stop();
+          this.players.bg2.stop();
+          this.players[id].start();
+          this.activeBG = id;
+          this.bgStartTime = Tone.now();
+        },
+
+        stopAllBG: function () {
+          this.players.bg1.stop();
+          this.players.bg2.stop();
+          this.activeBG = null;
+        },
+
+        playLoop: function (id) {
+          if (!window.soundOn || !this.ready) return;
+          this.ensureContext();
+          if (this.activeLoop === id) return;
+          this.players.loop1.stop();
+          this.players.loop2.stop();
+          if (this.activeBG) {
+            var elapsed = Tone.now() - this.bgStartTime;
+            var posInLoop = elapsed % this.LOOP_DURATION;
+            var delay = this.LOOP_DURATION - posInLoop;
+            this.players[id].start("+" + delay);
+          } else {
+            this.players[id].start();
+          }
+          this.activeLoop = id;
+        },
+
+        stopAllLoop: function () {
+          this.players.loop1.stop();
+          this.players.loop2.stop();
+          this.activeLoop = null;
+        },
+
+        stopAll: function () {
+          this.stopAllBG();
+          this.stopAllLoop();
+        },
+      };
+      window.frivSound = frivSound;
+      frivSound.init();
+
       function toggleSound() {
         soundOn = !soundOn;
         var btn = document.getElementById("sound-icon");
         btn.src = soundOn ? "soundon.svg" : "soundoff.svg";
+        if (soundOn) {
+          Tone.start();
+        } else if (window.frivSound) {
+          window.frivSound.stopAll();
+        }
       }
 
       // Automatically resize headings so they never wrap to a second line
@@ -395,7 +491,7 @@
         window.addEventListener("resize", fitHeadings);
 
         var links = document.querySelectorAll("#toc nav a");
-        links.forEach(function (link) {
+        links.forEach(function (link, idx) {
           link.addEventListener("click", function (e) {
             e.preventDefault();
             var target = document.querySelector(this.getAttribute("href"));
@@ -407,6 +503,11 @@
                 offset;
               window.scrollTo({ top: top, behavior: "smooth" });
             }
+          });
+          // Alternate Loop1 / Loop2 across nav items
+          var loopId = idx % 2 === 0 ? "loop1" : "loop2";
+          link.addEventListener("mouseenter", function () {
+            if (window.frivSound) window.frivSound.playLoop(loopId);
           });
         });
 
