@@ -351,10 +351,10 @@
         ]);
         AdobeAn.compositionLoaded(lib.properties.id);
         fnStartAnimation();
-        // scaleHero();
+        scaleHero();
       }
 
-      /* function scaleHero() {
+      function scaleHero() {
         var cw = 614,
           ch = 445;
         var max_width = 860;
@@ -369,7 +369,7 @@
         ac.style.marginLeft = "-" + cw / 2 + "px";
         hero.style.height = Math.floor(ch * s) + "px";
       }
-      window.addEventListener("resize", scaleHero); */
+      window.addEventListener("resize", scaleHero);
 
       var soundOn = false;
 
@@ -379,8 +379,13 @@
         players: {},
         activeBG: null,
         activeLoop: null,
-        bgStartTime: 0,
         ready: false,
+        _bgDebounceTimer: null,
+        _bgDebounceMs: 150,
+        _pendingBG: null,
+        _pendingLoop: null,
+        _boundary: null,
+        _sequencerRunning: false,
 
         init: function () {
           var self = this;
@@ -400,6 +405,27 @@
             url: "websounds/Loop2.mp3",
             loop: true,
           }).toDestination();
+
+          // Tone.Loop as master sequencer: fires at every loop boundary
+          this._boundary = new Tone.Loop(function (time) {
+            if (self._pendingBG) {
+              var newBG = self._pendingBG;
+              self._pendingBG = null;
+              self.players.bg1.stop(time);
+              self.players.bg2.stop(time);
+              self.players[newBG].start(time);
+              self.activeBG = newBG;
+            }
+            if (self._pendingLoop) {
+              var newLoop = self._pendingLoop;
+              self._pendingLoop = null;
+              self.players.loop1.stop(time);
+              self.players.loop2.stop(time);
+              self.players[newLoop].start(time);
+              self.activeLoop = newLoop;
+            }
+          }, this.LOOP_DURATION);
+
           Tone.loaded().then(function () {
             self.ready = true;
           });
@@ -411,18 +437,48 @@
           }
         },
 
+        _startSequencer: function () {
+          if (!this._sequencerRunning) {
+            this._boundary.start(0);
+            Tone.Transport.start();
+            this._sequencerRunning = true;
+          }
+        },
+
+        _executeBGSwitch: function (id) {
+          if (this.activeBG === id) {
+            this._pendingBG = null;
+            return;
+          }
+          this.ensureContext();
+          this._startSequencer();
+
+          if (!this.activeBG) {
+            this.players[id].start();
+            this.activeBG = id;
+          } else {
+            this._pendingBG = id;
+          }
+        },
+
         playBG: function (id) {
           if (!window.soundOn || !this.ready) return;
-          this.ensureContext();
-          if (this.activeBG === id) return;
-          this.players.bg1.stop();
-          this.players.bg2.stop();
-          this.players[id].start();
-          this.activeBG = id;
-          this.bgStartTime = Tone.now();
+          var self = this;
+          if (this._bgDebounceTimer) {
+            clearTimeout(this._bgDebounceTimer);
+          }
+          this._bgDebounceTimer = setTimeout(function () {
+            self._bgDebounceTimer = null;
+            self._executeBGSwitch(id);
+          }, this._bgDebounceMs);
         },
 
         stopAllBG: function () {
+          if (this._bgDebounceTimer) {
+            clearTimeout(this._bgDebounceTimer);
+            this._bgDebounceTimer = null;
+          }
+          this._pendingBG = null;
           this.players.bg1.stop();
           this.players.bg2.stop();
           this.activeBG = null;
@@ -432,20 +488,18 @@
           if (!window.soundOn || !this.ready) return;
           this.ensureContext();
           if (this.activeLoop === id) return;
-          this.players.loop1.stop();
-          this.players.loop2.stop();
-          if (this.activeBG) {
-            var elapsed = Tone.now() - this.bgStartTime;
-            var posInLoop = elapsed % this.LOOP_DURATION;
-            var delay = this.LOOP_DURATION - posInLoop;
-            this.players[id].start("+" + delay);
-          } else {
+          this._startSequencer();
+
+          if (!this.activeBG && !this.activeLoop) {
             this.players[id].start();
+            this.activeLoop = id;
+          } else {
+            this._pendingLoop = id;
           }
-          this.activeLoop = id;
         },
 
         stopAllLoop: function () {
+          this._pendingLoop = null;
           this.players.loop1.stop();
           this.players.loop2.stop();
           this.activeLoop = null;
