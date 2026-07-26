@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Frivolous Hub (Live) - the living work of Daniel Gardner</title>
     <meta name="description" content="Frivolous Live — Daniel Gardner. Live electronic music performance, DJ, micro house, minimal techno. Based in Berlin.">
     <meta name="keywords" content="Frivolous, Daniel Gardner, live electronic music performance, DJ, micro house, minimal techno, Berlin">
@@ -32,15 +32,15 @@
       }
       body {
         background:
-          url("charcoalscribbles.png") no-repeat center top / 100% auto,
-          url("charcoalscribbles-03.png") no-repeat right 20px top / 40% auto,
-          url("charcoalscribbles-03.png") no-repeat right 20px bottom / 40% auto,
-          url("charcoalscribbles.png") no-repeat center top / 100% auto,
-          url("charcoalscribbles.png") no-repeat center bottom / 100% auto,
+          url("charcoalscribbles.v3.png") no-repeat center top / 100% auto,
+          url("charcoalscribbles.v3.png") no-repeat right 20px top / 40% auto,
+          url("charcoalscribbles.v3.png") no-repeat right 20px bottom / 40% auto,
+          url("charcoalscribbles.v3.png") no-repeat center top / 100% auto,
+          url("charcoalscribbles.v3.png") no-repeat center bottom / 100% auto,
           url("inkblots_v3.png") no-repeat center top / 100% auto,
-          url("inkblots.jpg") no-repeat center bottom / 100% auto,
-          url("foolscap_disintegrated.v3.png") no-repeat center top / 100% auto,
-          url("foolscap_disintegrated.v3.png") no-repeat center bottom / 100% auto,
+          url("inkblots_v3.png") no-repeat center bottom / 100% auto,
+          url("foolscap_disintegrated.v3") no-repeat center top / 100% auto,
+          url("foolscap_disintegrated.v3") no-repeat center bottom / 100% auto,
           #6d8196;
         font-family: "SpaceMono", monospace;
         color: #222;
@@ -147,7 +147,7 @@
         display: block;
         font-size: clamp(13px, 4vw, 26px);
         letter-spacing: 1.5px;
-        text-transform: uppercase;
+        text-transform: lowercase;
         color: #ff00ff;
         text-decoration: none;
         margin: 5px 0;
@@ -155,6 +155,9 @@
         text-shadow:
           0 0 5.7px rgba(255, 0, 255, 0.67),
           0 0 11.4px rgba(255, 0, 255, 0.48);
+      }
+      #toc nav a:first-child {
+        margin-top: 2.8em;
       }
       #toc nav a:hover {
         transform: scale(1.25) rotate(15deg);
@@ -252,21 +255,21 @@
       @media (max-width: 768px) {
         body {
           background:
-            url("charcoalscribbles.png") no-repeat center top / 100% auto,
-            url("charcoalscribbles-03.png") no-repeat right 20px top / 40% auto,
-            url("charcoalscribbles-03.png") no-repeat right 20px center / 40%
+            url("charcoalscribbles.v3.png") no-repeat center top / 100% auto,
+            url("charcoalscribbles.v3.png") no-repeat right 20px top / 40% auto,
+            url("charcoalscribbles.v3.png") no-repeat right 20px center / 40%
               auto,
-            url("charcoalscribbles-03.png") no-repeat right 20px bottom / 40%
+            url("charcoalscribbles.v3.png") no-repeat right 20px bottom / 40%
               auto,
             url("charcoalscribbles.png") no-repeat center top / 100% auto,
             url("charcoalscribbles.png") no-repeat center center / 100% auto,
             url("charcoalscribbles.png") no-repeat center bottom / 100% auto,
-            url("inkblots.jpg") no-repeat center top / 100% auto,
-            url("inkblots.jpg") no-repeat center center / 100% auto,
-            url("inkblots.jpg") no-repeat center bottom / 100% auto,
-            url("foolscap.png") no-repeat center top / 100% auto,
-            url("foolscap.png") no-repeat center center / 100% auto,
-            url("foolscap.png") no-repeat center bottom / 100% auto,
+            url("inkblots_v3.png") no-repeat center top / 100% auto,
+            url("inkblots_v3.png") no-repeat center center / 100% auto,
+            url("inkblots_v3.png") no-repeat center bottom / 100% auto,
+            url("foolscap_disintegrated.v3.png") no-repeat center top / 100% auto,
+            url("foolscap_disintegrated.v3.png") no-repeat center center / 100% auto,
+            url("foolscap_disintegrated.v3.png") no-repeat center bottom / 100% auto,
             #fff;
         }
       }
@@ -362,16 +365,18 @@
 
       // Automatically resize headings so they never wrap to a second line
       function fitHeadings() {
-        document.querySelectorAll(".section-heading").forEach(function (heading) {
-          // Start from the CSS-defined size
-          heading.style.fontSize = "";
-          var available = heading.parentElement.clientWidth * 0.98;
-          var actual = heading.scrollWidth;
-          if (actual > available) {
-            var current = parseFloat(getComputedStyle(heading).fontSize);
-            heading.style.fontSize = (current * available / actual) + "px";
-          }
-        });
+        document
+          .querySelectorAll(".section-heading")
+          .forEach(function (heading) {
+            // Start from the CSS-defined size
+            heading.style.fontSize = "";
+            var available = heading.parentElement.clientWidth * 0.98;
+            var actual = heading.scrollWidth;
+            if (actual > available) {
+              var current = parseFloat(getComputedStyle(heading).fontSize);
+              heading.style.fontSize = (current * available) / actual + "px";
+            }
+          });
       }
 
       document.addEventListener("DOMContentLoaded", function () {
@@ -429,102 +434,126 @@
       <div class="section" id="artist-statement">
         <div class="section-heading"> <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span><span>T</span><span
             class="space"></span><span>S</span><span>T</span><span>A</span><span>T</span><span>E</span><span
-            style="margin-left: 0px;">M</span><span>E</span><span>N</span><span>T</span>
+            style="margin-left: 0px">M</span><span>E</span><span>N</span><span>T</span>
         </div>
-        <p><center><img src="images/HiRes4_smaller.JPG" alt="Frivolous in Berlin"
+        <p></p>
+        <center> <img src="images/HiRes4_smaller.JPG" alt="Frivolous in Berlin"
             title="You can't take the Canadian out of the Berliner"
-            style="width: 850px;"></center></p>
-        <p><br>
-        My goal for the project Frivolous is to keep a firm grip on my innocent
-        fascination with Electronic Music. To continue to engage a naive spirit
-        that communicates through the integration of multi-contextual and
-        multi-historical influences. Ideas of sound re-contextualization
-        (sampling and re-sampling) will be used to create unorthodox and
-        spell-bound narratives in new and unified sonic spatial environments.
-        Although the music can often be dance-able, the intention is to provoke
-        mystery and musical questions in the listener as the work attempts to
-        illuminate the playfulness and contradictions of the human condition.
-        </p>
+            style="max-width: 100%; height: auto">
+        </center>
+        <p></p>
+        <p> <br>
+          My goal for the project Frivolous is to keep a firm grip on my
+          innocent fascination with Electronic Music. To continue to engage a
+          naive spirit that communicates through the integration of
+          multi-contextual and multi-historical influences. Ideas of sound
+          re-contextualization (sampling and re-sampling) will be used to create
+          unorthodox and spell-bound narratives in new and unified sonic spatial
+          environments. Although the music can often be dance-able, the
+          intention is to provoke mystery and musical questions in the listener
+          as the work attempts to illuminate the playfulness and contradictions
+          of the human condition. </p>
       </div>
       <div class="section left" id="history">
         <div class="section-heading"> <span>H</span><span>I</span><span>S</span><span>T</span><span>O</span><span>R</span><span>Y</span>
         </div>
         <p> My name is Daniel Gardner. My main project is called Frivolous. I
           participated in (and emerged from) the Canadian underground Electronic
-          Music scene under a very heavy influence from German Minimal House
-          Music (Frankfurt circa late-2000's) and the French and Québécois
-          Mikrohouse movements. Under the name Frivolous I have performed and
-          published original Electronic music which resulted in a substantial
-          body of work published by independent labels around the world. My
-          influences do not adhere to conventional or conservative
-          "genre-fication"; I unapologetically borrow influences from cultures
-          and styles throughout history and weave them into this work. </p>
+          Music scene under heavy influence from German Minimal House (Frankfurt
+          circa late-2000's) and the French and Québécois Mikrohouse movements.
+          Under the name <strong><i>Frivolous</i></strong> I compose original
+          Electronic music which has resulted in a substantial body of work
+          published by various independent labels around the world. Although you
+          will hear the 'Zeitgeist' of various genres and periods of music in my
+          work I try not to be bound to any Genre. I&nbsp; unapologetically
+          borrow influences from cultures and styles throughout history and
+          weave them into a fluidly evolving work.<br>
+        </p>
+        <p><br>
+        </p>
         <p> In addition to the Frivolous work I've produced music on a
-          commission-basis including themes for podcasts and Radio-stations
-          including Deutschland-Radio, TwenFM and worked on a freelance basis at
-          the CBC (Canadian Broadcasting Company) in live-sound. Performing this
-          work live at selected special locations; Frivolous (Live) has been
-          featured at such renowned Festivals as Montreux Jazz Festival, MUTEK,
-          Transmediale/CTM and Amsterdam Dance Event. I currently have a studio
+          commission-basis for podcasts and Radio-stations including <strong>Deutschland-Radio,
+            TwenFM</strong> and have worked on a freelance basis at the <strong>CBC
+            (Canadian Broadcasting Company)</strong> in live-sound. Performing
+          this work live at selected special locations; Frivolous (Live) has
+          been featured at such renowned Festivals as <strong>Montreux Jazz
+            Festival</strong>, <strong>MUTEK</strong>, <strong>Transmediale/CTM</strong>
+          and <strong>Amsterdam Dance Event</strong>. I currently have a studio
           in Berlin where I continue to record original music, collaborate with
-          other artists and make remixes while also doing live sound mixing and
-          recording for independent films and at the 'Konzertreihe am Café
-          Tasso' in Berlin-Friedrichshain. </p>
-        <p> Sound Engineering: my excursion into Sound-Engineering has mostly
-          been unguided and unconventional. Perhaps this is the reason for the
-          unique sound of Frivolous over the years (see sections: New Releases
-          &amp; Discography). My musical journey started with Classical music
-          studies at a young age. I was enrolled at Royal Conservatory of Music
-          where I begrudgingly finished my Grade-8: including Music-Theory and
-          History. Only long after my career was started did I do an MA in 2020
-          in Creative Music Production at Catalyst Institute in Berlin. This
-          offered me the opportunity to do something productive during the
-          Pandemic and the chance to return to Europe after almost 10 years of
-          living back in Canada. </p>
-        <p> I came to this program at Catalyst with many metaphorical demons in
-          my closet - these were topics which I was growing more and more
-          uncomfortable with in the evolving landscape of music production,
-          especially as it played-out between 2008-2018. Thankfully the Masters
-          Degree program taught me how to conduct an Academic- and
-          Practice-based research approach to dealing with these concerns which
-          did certainly help me exorcise those demons. I could finally make an
-          academic assertion for my growing discomfort regarding the music of
-          this time. Mainly that the tools being used to achieve LOUDNESS in
-          recorded music was also killing the producers ability to create
-          "reality-based space". I then conducted a material study (more
-          artistic than scientific) to determine if the music of this time
+          other artists and make remixes while also doing live sound capture for
+          independent films and sound-mixing (front of house) at the<em> </em><strong>Konzertreihe
+            am Café Tasso</strong> in Berlin-Friedrichshain. </p>
+        <p><br>
+        </p>
+        <p><br>
+        </p>
+        <p><br>
+        </p>
+        <p> <strong>Sound Engineering:</strong> my excursion into
+          Sound-Engineering has mostly been unguided and unconventional. Perhaps
+          this is the reason for the unique sound of Frivolous over the years
+          (see sections: <strong><em>New Releases </em></strong><em>&amp;</em><strong><em>
+              Discography</em></strong> for links to newer and older work). My
+          musical journey started with Classical music studies at a young age. I
+          was enrolled at Royal Conservatory of Music where I begrudgingly
+          finished my Grade-8: including Music-Theory and History. After many
+          years of working and touring I finally completed an MA in 2020 in
+          Creative Electronic Music Production at Catalyst Institute in Berlin.
+          This may sound like a strange order, but it offered me the opportunity
+          to do something possitive during the Pandemic and gave me the chance
+          to return to Europe after almost 10 years of living back in Canada on
+          an small island in the Pacific Northwest.<span style="color: #222222">
+          </span>I also came to this MA program at Catalyst Institute with many
+          ideological demons in my closet - topics which I was growing ever-more
+          uncomfortable with in the landscape of modern music production:
+          especially as it played-out between 2008-2018. The Masters program
+          taught me how to conduct a Practice-based research approach to dealing
+          with these concerns which did certainly helped me to address the issue
+          academically. This gave me the intellectual tools to assert for my
+          growing discomfort regarding the music of this time (Mainly that the
+          tools being used to achieve perceptual LOUDNESS in recorded music was
+          also killing music's inherent ability to model or reproduce
+          "reality-based spatial sound"). In the program I conducted a study
+          (more artistic than scientific) to determine if the music of this time
           (which was becoming known to many technicians as "the loudness war
           period") was not only evolving in an aesthetic way, but doing so in
-          direct conversation with the "reality" of acoustic spatial design.
-          Playing with these ideas of reality or, at least, referencing the
-          human-being's experience in sound design had up to this point been
-          ubiquitous in sound-engineering and recordings made up until around
-          2008 in almost every genre including Electronic Music. After which
-          time it seemed engineers were placing less emphasis (consciously or
-          unconsciously) on "reality-based" spatial acoustic modeling techniques
-          in favour of fragmented or "hyper-reality" spatial dimensions. This
-          led to the question: was the competition for loudness impeding music's
-          ability to convey the human-experience or, perhaps in parallel, does a
-          new sonic "hyper-reality" allow listeners a new prospectus: to escape
-          (rather than be reminded of) the reality of resentful human decline. I
-          do not wish to focus on the darkness of this prospect and although I
-          do try to remain unbiased and use my production tools in a way that
-          makes listeners simply enjoy music - I will say that I certainly have
-          a bias towards one of the two options. Let's make this fun! Can you
-          tell which one? (reality or hyper-reality based sound design?) I would
-          let my listeners determine this for themselves. </p>
+          direct conversation with the "reality" of acoustic spatial sound
+          design. Playing with these ideas of reality or, at least, referencing
+          the human-being's experience in sound-design had (up to this point)
+          been ubiquitous in sound recordings up until around 2008 in almost
+          every genre including Electronic Music. After which time it seemed
+          engineers were placing less emphasis (consciously or unconsciously) on
+          "reality-based" spatial acoustic modeling techniques in favor of
+          fragmented or "hyper-reality" spatial dimensions. This led to the
+          question: was the competition for loudness impeding music's ability to
+          convey the human-experience or, perhaps in parallel, does a new sonic
+          "hyper-reality" allow listeners a new possibility: <strong>to escape
+            (rather than be reminded of) the reality of resentful human decline
+            (OH SHIT! this just got DARK but who said Academia isn't dark?!?
+            :-D)</strong> <br><br>
+        Let's not focus on the darkness of this prospect! In my mind Music
+        is meant to unite, illuminate and transcend - thus proving that I
+        certainly have a bias towards one of the two options. Can you tell
+        which one? (reality or hyper-reality based sound design?) I guess my
+        listeners can easily determine the answer for themselves. </p><br>
       </div>
       <div class="section" id="new-releases">
         <div class="section-heading"> <span>N</span><span>E</span><span>W</span><span
             class="space"></span><span>R</span><span>E</span><span>L</span><span>E</span><span>A</span><span>S</span><span>E</span><span>S</span>
         </div>
-        <p> 2025 (Chippy Chasers) – <a href="https://chippychasers.bandcamp.com/album/meteorology-reissue"
+        <br> <left> <img src="images/Meteorology2025.png" alt="Meteorology 2025 Re-release"
+            title="Meteorology 2025 on Chippy Chasers"
+            style="max-width: 100%; height: auto">
+        </left>
+        <p>
+          2025 (Chippy Chasers)<br>
+          <a href="https://chippychasers.bandcamp.com/album/meteorology-reissue"
             target="_blank">Meteorology
-            (Album re-release)</a> with Hits like "Wasting Time", "Allentown
-          Jail" &amp; "Ostalgia"<br>
+            (Album re-release)</a> <br>
+          with Hits like "Wasting Time", "Allentown Jail" &amp; "Ostalgia"<br>
           <br>
-          2025 (Manjumasi) Mark Slee - <a href="https://link.manjumasi.com/whirligig"
-            target="_blank">Whirligig
+          2025 (Manjumasi) Mark Slee<br>
+          <a href="https://link.manjumasi.com/whirligig" target="_blank">Whirligig
             (Frivolous Remix)</a><br>
           <br>
           2025 (Leporelo) <a href="https://leporelo.bandcamp.com/track/i-feel-you-hear-that-mr-f-sound"
@@ -532,54 +561,64 @@
             - I Feel You (Hear That 'Mr. F' Sound)</a><br>
           <br>
           2024 (self-release) <a href="https://the-real-frivolous.bandcamp.com/album/the-wonder-of-the-feeler-ep"
-            target="_blank">Frivolous
-            - The Wonder of the Feeler</a> (single)<br>
+            target="_blank"><br>
+            Frivolous - The Wonder of the Feeler</a> <br>
           <br>
-          2024 (URSL) Jan Mir, Paul Sandberg, Tomas Svensson - <a href="https://urslrecords.bandcamp.com/track/cans-coffee-frivolous-remix"
+          2024 (URSL) Jan Mir, Paul Sandberg, Tomas Svensson<br>
+          <a href="https://urslrecords.bandcamp.com/track/cans-coffee-frivolous-remix"
             target="_blank">Cans
             &amp; Coffee (Frivolous Remix)</a><br>
           <br>
-          2023 (Compost Records) Frivolous - <a href="https://compostrecords.bandcamp.com/album/psycho-acoustic-principles-for-the-dancefloor-ep"
+          2023 (Compost Records) Frivolous<br>
+          <a href="https://compostrecords.bandcamp.com/album/psycho-acoustic-principles-for-the-dancefloor-ep"
             target="_blank">Psycho
             Acoustic Principles for the Dancefloor EP</a><br>
           <br>
-          2023 (Compost Records) Felix Labande - <a href="https://felixlaband.bandcamp.com/track/we-know-major-toms-a-junkie-frivolous-remix"
+          2023 (Compost Records) Felix Labande<br>
+          <a href="https://felixlaband.bandcamp.com/track/we-know-major-toms-a-junkie-frivolous-remix"
             target="_blank">We
             Know Major Tom's A Junkie (Frivolous Remix)</a><br>
           <br>
-          2022 (Bar 25 Music) Frivolous - <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-bar25-176"
+          2022 (Bar 25 Music) Frivolous <br>
+          <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-bar25-176"
             target="_blank">The
             Tiny House of Delusion (Album)</a><br>
           <br>
-          2022 (Bar 25 Music) Frivolous - <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179"
+          2022 (Bar 25 Music) Frivolous<br>
+          <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179"
             target="_blank">The
             Tiny House of Delusion (Remixes)<br>
           </a><br>
-          2022 (LNDKHN) Kermesse / Landikhan - <a href="https://soundcloud.com/frivolous/kermesse-space-time-frivolous-remix"
+          2022 (LNDKHN) Kermesse / Landikhan<br>
+          <a href="https://soundcloud.com/frivolous/kermesse-space-time-frivolous-remix"
             target="_blank">Space
             &amp; Time (Frivolous Remix)</a><br>
           <br>
-          2020 (Otake Records) <a href="https://soundcloud.com/otakerecords/sets/frivolous-release-paralysis-otake-033"
+          2020 (Otake Records) <br>
+          <a href="https://soundcloud.com/otakerecords/sets/frivolous-release-paralysis-otake-033"
             target="_blank">Frivolous
             - Release Paralysis EP</a> </p>
       </div>
-      <div class="section right" id="discography">
+      <div class="section left" id="discography">
         <div class="section-heading"> <span>D</span><span>I</span><span>S</span><span>C</span><span>O</span><span>G</span><span>R</span><span>A</span><span>P</span><span>H</span><span>Y</span>
         </div>
         <a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">
         </a>
-        <p><b><a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">Almost
-              (nearly) complete discography @ Discogs.com</a></b></p>
+        <p> <b><a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">Almost
+              (nearly) complete discography @ Discogs.com</a></b> </p>
         <a href="https://www.discogs.com/artist/51765-Frivolous" target="_blank">
-        </a></div>
+        </a> </div>
       <div class="section" id="live-performance">
         <div class="section-heading"> <span>L</span><span>I</span><span>V</span><span>E</span><span
             class="space"></span><span>P</span><span>E</span><span>R</span><span>F</span><span>O</span><span>R</span><span>M</span><span>A</span><span>N</span><span>C</span><span>E</span>
         </div>
-        <p><center><img src="images/Nation_of_Godwana.JPG" alt="Frivolous LIVE at Nation of Godwana"
+        <p></p>
+        <center> <img src="images/Nation_of_Godwana.JPG" alt="Frivolous LIVE at Nation of Godwana"
             title="Frivolous Nation of Godwana"
-            style="width: 850px;"></center></p>
-        <p><br>
+            style="max-width: 100%; height: auto">
+        </center>
+        <p></p>
+        <p> <br>
           Performance Ideology (&amp; Bookings): Frivolous is not an act which
           is concerned by definitions of commercial visibility. Although some
           live appearances have happened at notable venues around the world; my
@@ -619,5 +658,6 @@
       </div>
     </div>
     <footer>© 2026 Frivolous</footer>
+    
   </body>
 </html>
