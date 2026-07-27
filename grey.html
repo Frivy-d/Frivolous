@@ -529,8 +529,14 @@
         soundOn = !soundOn;
         var btn = document.getElementById("sound-icon");
         btn.src = soundOn ? "soundon.svg" : "soundoff.svg";
+        console.log("[toggleSound] soundOn:", soundOn);
         if (soundOn) {
-          Tone.start();
+          Tone.start().then(function () {
+            console.log("[toggleSound] Tone context running");
+            if (window.frivSound && !window.frivSound.playing) {
+              window.frivSound.startAll();
+            }
+          });
         } else if (window.frivSound) {
           window.frivSound.shutdown();
         }
