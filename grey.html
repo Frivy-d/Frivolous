@@ -217,7 +217,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 1px;
+        width: 2px;
         height: 100%;
         background: #000;
         z-index: 2;
@@ -360,7 +360,7 @@
         }
         exportRoot = new lib.FixedActionScriptForAia_HTML5Canvas_Scene1();
         stage = new lib.Stage(canvas);
-        stage.enableMouseOver();
+        stage.enableMouseOver(60);
         fnStartAnimation = function () {
           stage.addChild(exportRoot);
           createjs.Ticker.framerate = lib.properties.fps;
@@ -396,18 +396,17 @@
       var soundOn = false;
 
       // ── Tone.js Sound Manager ──
+      // All loops start simultaneously (muted). Hover unmutes one per group.
       var frivSound = {
-        LOOP_DURATION: 7.941,
         players: {},
+        groups: {
+          bg: ["bg1", "bg2"],
+          loop: ["loop1", "loop2"],
+        },
         activeBG: null,
         activeLoop: null,
         ready: false,
-        _bgDebounceTimer: null,
-        _bgDebounceMs: 150,
-        _pendingBG: null,
-        _pendingLoop: null,
-        _boundary: null,
-        _sequencerRunning: false,
+        playing: false,
 
         init: function () {
           var self = this;
@@ -428,108 +427,99 @@
             loop: true,
           }).toDestination();
 
-          // Tone.Loop as master sequencer: fires at every loop boundary
-          this._boundary = new Tone.Loop(function (time) {
-            if (self._pendingBG) {
-              var newBG = self._pendingBG;
-              self._pendingBG = null;
-              self.players.bg1.stop(time);
-              self.players.bg2.stop(time);
-              self.players[newBG].start(time);
-              self.activeBG = newBG;
-            }
-            if (self._pendingLoop) {
-              var newLoop = self._pendingLoop;
-              self._pendingLoop = null;
-              self.players.loop1.stop(time);
-              self.players.loop2.stop(time);
-              self.players[newLoop].start(time);
-              self.activeLoop = newLoop;
-            }
-          }, this.LOOP_DURATION);
+          // Start all muted
+          Object.keys(this.players).forEach(function (key) {
+            self.players[key].mute = true;
+          });
 
           Tone.loaded().then(function () {
             self.ready = true;
+            console.log("[frivSound] All players loaded and ready");
           });
         },
 
-        ensureContext: function () {
-          if (Tone.context.state !== "running") {
-            Tone.start();
-          }
-        },
-
-        _startSequencer: function () {
-          if (!this._sequencerRunning) {
-            this._boundary.start(0);
-            Tone.Transport.start();
-            this._sequencerRunning = true;
-          }
-        },
-
-        _executeBGSwitch: function (id) {
-          if (this.activeBG === id) {
-            this._pendingBG = null;
-            return;
-          }
-          this.ensureContext();
-          this._startSequencer();
-
-          if (!this.activeBG) {
-            this.players[id].start();
-            this.activeBG = id;
-          } else {
-            this._pendingBG = id;
-          }
+        // Start all loops simultaneously (called on first sound-on)
+        startAll: function () {
+          if (this.playing) return;
+          if (Tone.context.state !== "running") Tone.start();
+          var now = Tone.now();
+          Object.keys(this.players).forEach(
+            function (key) {
+              this.players[key].start(now);
+            }.bind(this),
+          );
+          this.playing = true;
+          console.log("[frivSound] startAll — all loops started at", now);
         },
 
         playBG: function (id) {
           if (!window.soundOn || !this.ready) return;
+          if (this.activeBG === id) {
+            console.log("[frivSound] playBG skipped — already active:", id);
+            return;
+          }
+          if (!this.playing) this.startAll();
           var self = this;
-          if (this._bgDebounceTimer) {
-            clearTimeout(this._bgDebounceTimer);
-          }
-          this._bgDebounceTimer = setTimeout(function () {
-            self._bgDebounceTimer = null;
-            self._executeBGSwitch(id);
-          }, this._bgDebounceMs);
-        },
-
-        stopAllBG: function () {
-          if (this._bgDebounceTimer) {
-            clearTimeout(this._bgDebounceTimer);
-            this._bgDebounceTimer = null;
-          }
-          this._pendingBG = null;
-          this.players.bg1.stop();
-          this.players.bg2.stop();
-          this.activeBG = null;
+          this.groups.bg.forEach(function (key) {
+            var muted = key !== id;
+            self.players[key].mute = muted;
+            console.log("[frivSound] BG", key, muted ? "MUTED" : "UNMUTED");
+          });
+          this.activeBG = id;
+          console.log("[frivSound] playBG → active:", id);
         },
 
         playLoop: function (id) {
           if (!window.soundOn || !this.ready) return;
-          this.ensureContext();
-          if (this.activeLoop === id) return;
-          this._startSequencer();
-
-          if (!this.activeBG && !this.activeLoop) {
-            this.players[id].start();
-            this.activeLoop = id;
-          } else {
-            this._pendingLoop = id;
+          if (this.activeLoop === id) {
+            console.log("[frivSound] playLoop skipped — already active:", id);
+            return;
           }
+          if (!this.playing) this.startAll();
+          var self = this;
+          this.groups.loop.forEach(function (key) {
+            var muted = key !== id;
+            self.players[key].mute = muted;
+            console.log("[frivSound] Loop", key, muted ? "MUTED" : "UNMUTED");
+          });
+          this.activeLoop = id;
+          console.log("[frivSound] playLoop → active:", id);
+        },
+
+        stopAllBG: function () {
+          var self = this;
+          this.groups.bg.forEach(function (key) {
+            self.players[key].mute = true;
+          });
+          this.activeBG = null;
+          console.log("[frivSound] stopAllBG — all BG muted");
         },
 
         stopAllLoop: function () {
-          this._pendingLoop = null;
-          this.players.loop1.stop();
-          this.players.loop2.stop();
+          var self = this;
+          this.groups.loop.forEach(function (key) {
+            self.players[key].mute = true;
+          });
           this.activeLoop = null;
+          console.log("[frivSound] stopAllLoop — all loops muted");
         },
 
         stopAll: function () {
           this.stopAllBG();
           this.stopAllLoop();
+        },
+
+        // Mute everything and stop playback
+        shutdown: function () {
+          var self = this;
+          Object.keys(this.players).forEach(function (key) {
+            self.players[key].mute = true;
+            self.players[key].stop();
+          });
+          this.activeBG = null;
+          this.activeLoop = null;
+          this.playing = false;
+          console.log("[frivSound] shutdown — all stopped and muted");
         },
       };
       window.frivSound = frivSound;
@@ -542,7 +532,7 @@
         if (soundOn) {
           Tone.start();
         } else if (window.frivSound) {
-          window.frivSound.stopAll();
+          window.frivSound.shutdown();
         }
       }
 
@@ -591,14 +581,18 @@
           scrollToTopBtn.addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
           });
+          var bounceTimer = null;
           window.addEventListener("scroll", function () {
             var currentY = window.scrollY;
             if (currentY > 300) {
               scrollToTopBtn.classList.add("visible");
-              if (currentY > lastScrollY) {
+              if (currentY > lastScrollY && !bounceTimer) {
                 scrollToTopBtn.style.animation = "none";
-                scrollToTopBtn.offsetHeight; // force reflow
+                scrollToTopBtn.offsetHeight;
                 scrollToTopBtn.style.animation = "bounceUp 0.5s ease-out";
+                bounceTimer = setTimeout(function () {
+                  bounceTimer = null;
+                }, 500);
               }
             } else {
               scrollToTopBtn.classList.remove("visible");
@@ -770,114 +764,168 @@
           ><span>S</span><span>E</span><span>S</span>
         </div>
         <p>
-          <left> <img src="images/Meteorology2025.png" alt="Meteorology 2025 Re-release"
-            title="Meteorology 2025 on Chippy Chasers"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br> 2025 (Chippy Chasers)<br />
-          <a href="https://chippychasers.bandcamp.com/album/meteorology-reissue"
+          <left>
+            <img
+              src="images/Meteorology2025.png"
+              alt="Meteorology 2025 Re-release"
+              title="Meteorology 2025 on Chippy Chasers"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2025 (Chippy Chasers)<br />
+          <a
+            href="https://chippychasers.bandcamp.com/album/meteorology-reissue"
             target="_blank"
             >Meteorology (Album re-release)</a
           >
           <br />
           with Hits like "Wasting Time", "Allentown Jail" &amp; "Ostalgia"<br />
           <br />
-          <left> <img src="images/whirligig.png" alt="Mark_Slee-Whirlygig_Remix"
-            title="Mark Slee Whirlygig Frivolous Remix"
-            style="max-width: 100%; height: auto">
-        </left>
+          <left>
+            <img
+              src="images/whirligig.png"
+              alt="Mark_Slee-Whirlygig_Remix"
+              title="Mark Slee Whirlygig Frivolous Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
           2025 (Manjumasi) Mark Slee<br />
           <a href="https://link.manjumasi.com/whirligig" target="_blank"
             >Whirligig (Frivolous Remix)</a
           ><br />
-          <left> <img src="images/milos.png" alt="Milosh_I_Feel_You_Remix"
-            title="Milosh_I_Feel_You_Frivolous_Remix"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+          <left>
+            <img
+              src="images/milos.png"
+              alt="Milosh_I_Feel_You_Remix"
+              title="Milosh_I_Feel_You_Frivolous_Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2025 (Leporelo)
           <a
             href="https://leporelo.bandcamp.com/track/i-feel-you-hear-that-mr-f-sound"
             target="_blank"
             >Milos - I Feel You (Hear That 'Mr. F' Sound)</a
           ><br />
-          <left> <img src="images/wonder.png" alt="The_Wonder_of_the_Feeler"
-            title="The_Wonder_of_the_Feeler"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
-          2024 (self-release)
-          <a href="https://the-real-frivolous.bandcamp.com/album/the-wonder-of-the-feeler-ep"
-            target="_blank"><br />
-            Frivolous - The Wonder of the Feeler</a>
+          <left>
+            <img
+              src="images/wonder.png"
+              alt="The_Wonder_of_the_Feeler"
+              title="The_Wonder_of_the_Feeler"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
           <br />
-          <left> <img src="images/janmir.png" alt="Coffee_and_Cans.remix"
-            title="Coffee and Cans Frivolous Remix"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+          2024 (self-release)
+          <a
+            href="https://the-real-frivolous.bandcamp.com/album/the-wonder-of-the-feeler-ep"
+            target="_blank"
+            ><br />
+            Frivolous - The Wonder of the Feeler</a
+          >
+          <br />
+          <left>
+            <img
+              src="images/janmir.png"
+              alt="Coffee_and_Cans.remix"
+              title="Coffee and Cans Frivolous Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2024 (URSL) Jan Mir, Paul Sandberg, Tomas Svensson<br />
           <a
             href="https://urslrecords.bandcamp.com/track/cans-coffee-frivolous-remix"
             target="_blank"
             >Cans &amp; Coffee (Frivolous Remix)</a
           ><br />
-          <left> <img src="images/psycho.png" alt="Psycho_Acoustic_Principles_For_The_Dancefloor"
-            title="Psycho_Acoustic_Principles_For_The_Dancefloor"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+          <left>
+            <img
+              src="images/psycho.png"
+              alt="Psycho_Acoustic_Principles_For_The_Dancefloor"
+              title="Psycho_Acoustic_Principles_For_The_Dancefloor"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2023 (Compost Records) Frivolous<br />
           <a
             href="https://compostrecords.bandcamp.com/album/psycho-acoustic-principles-for-the-dancefloor-ep"
             target="_blank"
             >Psycho Acoustic Principles for the Dancefloor EP</a
           ><br />
-          <left> <img src="images/weknow.png" alt="We_Know_Major_Toms_a_Junkie"
-            title="Felix_Labande_We_Know_Major_Toms_a_Junkie_Frivolous_Remix"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+          <left>
+            <img
+              src="images/weknow.png"
+              alt="We_Know_Major_Toms_a_Junkie"
+              title="Felix_Labande_We_Know_Major_Toms_a_Junkie_Frivolous_Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2023 (Compost Records) Felix Labande<br />
           <a
             href="https://felixlaband.bandcamp.com/track/we-know-major-toms-a-junkie-frivolous-remix"
             target="_blank"
             >We Know Major Tom's A Junkie (Frivolous Remix)</a
           ><br />
-          <left> <img src="images/the_tiny_house_of_delusion.png" alt="The_Tiny_House_Of_Delusion"
-            title="The_Tiny_House_Of_Delusion"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+          <left>
+            <img
+              src="images/the_tiny_house_of_delusion.png"
+              alt="The_Tiny_House_Of_Delusion"
+              title="The_Tiny_House_Of_Delusion"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2022 (Bar 25 Music) Frivolous <br />
-          <a href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-bar25-176"
+          <a
+            href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-bar25-176"
             target="_blank"
-            >The Tiny House of Delusion (Album)</a><br />
-           <left> <img src="images/the_tiny_house_of_delusion.png" alt="The_Tiny_House_Of_Delusion"
-            title="The_Tiny_House_Of_Delusion"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+            >The Tiny House of Delusion (Album)</a
+          ><br />
+          <left>
+            <img
+              src="images/the_tiny_house_of_delusion.png"
+              alt="The_Tiny_House_Of_Delusion"
+              title="The_Tiny_House_Of_Delusion"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2022 (Bar 25 Music) Frivolous<br />
           <a
             href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179"
             target="_blank"
-            >The Tiny House of Delusion (Remixes)<br /> </a>
-        
-          <left> <img src="images/Kermesse-Space_and_Time(Frivolous).jpg" alt="Kermesse-Space_and_Time(Frivolous_Remix)"
-            title="Kermesse-Space_and_Time(Frivolous_Remix)"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+            >The Tiny House of Delusion (Remixes)<br />
+          </a>
+
+          <left>
+            <img
+              src="images/Kermesse-Space_and_Time(Frivolous).jpg"
+              alt="Kermesse-Space_and_Time(Frivolous_Remix)"
+              title="Kermesse-Space_and_Time(Frivolous_Remix)"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2022 (LNDKHN) Kermesse / Landikhan<br />
-          <a href="https://soundcloud.com/frivolous/kermesse-space-time-frivolous-remix"
+          <a
+            href="https://soundcloud.com/frivolous/kermesse-space-time-frivolous-remix"
             target="_blank"
-            >Space &amp; Time (Frivolous Remix)</a><br />
-        <left> <img src="images/Release_Paralysis.png" alt="Release_Paralysis_EP"
-            title="Frivolous_Release_Paralysis_EP"
-            style="max-width: 100%; height: auto">
-        </left>
-          <br>
+            >Space &amp; Time (Frivolous Remix)</a
+          ><br />
+          <left>
+            <img
+              src="images/Release_Paralysis.png"
+              alt="Release_Paralysis_EP"
+              title="Frivolous_Release_Paralysis_EP"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
           2020 (Otake Records) <br />
           <a
             href="https://soundcloud.com/otakerecords/sets/frivolous-release-paralysis-otake-033"
