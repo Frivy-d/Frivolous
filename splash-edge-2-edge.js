@@ -10678,7 +10678,7 @@
     this.timeline.addTween(
       cjs.Tween.get({})
         .to({ state: [{ t: this.shape }] })
-        .to({ state: [{ t: this.instance }] }, 1)
+        .to({ state: [{ t: this.shape }, { t: this.instance }] }, 1)
         .wait(1),
     );
 
@@ -13919,7 +13919,7 @@
     this.timeline.addTween(
       cjs.Tween.get({})
         .to({ state: [{ t: this.shape }] })
-        .to({ state: [{ t: this.instance_1 }] }, 1)
+        .to({ state: [{ t: this.shape }, { t: this.instance_1 }] }, 1)
         .wait(1),
     );
 
@@ -13998,7 +13998,7 @@
     this.timeline.addTween(
       cjs.Tween.get({})
         .to({ state: [{ t: this.shape }] })
-        .to({ state: [{ t: this.instance_1 }] }, 1)
+        .to({ state: [{ t: this.shape }, { t: this.instance_1 }] }, 1)
         .wait(1),
     );
 

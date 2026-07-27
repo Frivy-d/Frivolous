@@ -7,6 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Frivolous Hub (Live) - the living work of Daniel Gardner</title>
+    <link rel="icon" type="image/svg+xml" href="soundon.svg" />
     <meta
       name="description"
       content="Frivolous Live — Daniel Gardner. Live electronic music performance, DJ, micro house, minimal techno. Based in Berlin."
@@ -264,6 +265,21 @@
       #scroll-to-top.visible {
         opacity: 0.7;
         pointer-events: auto;
+        animation: bounceUp 0.5s ease-out;
+      }
+      @keyframes bounceUp {
+        0% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-15px);
+        }
+        70% {
+          transform: translateY(5px);
+        }
+        100% {
+          transform: translateY(0);
+        }
       }
       #scroll-to-top.visible:hover {
         opacity: 1;
@@ -530,19 +546,17 @@
         }
       }
 
-      // Automatically resize headings so they never wrap to a second line
+      // Resize headings to fill available width based on span count
       function fitHeadings() {
+        var content = document.getElementById("content");
+        if (!content) return;
+        var available = Math.min(content.clientWidth, 900) * 0.88;
         document
           .querySelectorAll(".section-heading")
           .forEach(function (heading) {
-            // Start from the CSS-defined size
-            heading.style.fontSize = "";
-            var available = heading.parentElement.clientWidth * 0.98;
-            var actual = heading.scrollWidth;
-            if (actual > available) {
-              var current = parseFloat(getComputedStyle(heading).fontSize);
-              heading.style.fontSize = (current * available) / actual + "px";
-            }
+            var letters = heading.querySelectorAll("span:not(.space)").length;
+            if (letters === 0) return;
+            heading.style.fontSize = Math.floor(available / letters) + "px";
           });
       }
 
@@ -573,15 +587,23 @@
 
         var scrollToTopBtn = document.getElementById("scroll-to-top");
         if (scrollToTopBtn) {
+          var lastScrollY = window.scrollY;
           scrollToTopBtn.addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
           });
           window.addEventListener("scroll", function () {
-            if (window.scrollY > 300) {
+            var currentY = window.scrollY;
+            if (currentY > 300) {
               scrollToTopBtn.classList.add("visible");
+              if (currentY > lastScrollY) {
+                scrollToTopBtn.style.animation = "none";
+                scrollToTopBtn.offsetHeight; // force reflow
+                scrollToTopBtn.style.animation = "bounceUp 0.5s ease-out";
+              }
             } else {
               scrollToTopBtn.classList.remove("visible");
             }
+            lastScrollY = currentY;
           });
         }
       });
