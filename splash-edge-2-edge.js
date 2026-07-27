@@ -16527,11 +16527,17 @@
       { inst: this.instance_4, bg: "bg2", name: "parascope" },
       { inst: this.instance_5, bg: "bg1", name: "house_btn" },
     ];
+    var _isTouch =
+      window.friv && window.friv.isTouch !== undefined
+        ? window.friv.isTouch
+        : window.matchMedia("(pointer: coarse)").matches;
+    var soundEvent = _isTouch ? "click" : "mouseover";
+    console.log("[sound] Using event:", soundEvent, "isTouch:", _isTouch);
     for (var i = 0; i < overlayButtons.length; i++) {
       (function (btn) {
-        btn.inst.on("mouseover", function () {
+        btn.inst.on(soundEvent, function () {
           console.log(
-            "[hover] mouseover:",
+            "[" + soundEvent + "]",
             btn.name,
             "→ playBG(" + btn.bg + ")",
           );

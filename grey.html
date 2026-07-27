@@ -307,7 +307,7 @@
               center / 100% auto,
             url("./images/foolscap_disintegrated.v3.png") no-repeat center
               bottom / 100% auto,
-            #bbb7ab;
+            #6d8196;
         }
       }
     </style>
@@ -550,6 +550,9 @@
           });
       }
 
+      window.friv = window.friv || {};
+      window.friv.isTouch = window.matchMedia("(pointer: coarse)").matches;
+
       document.addEventListener("DOMContentLoaded", function () {
         fitHeadings();
         window.addEventListener("resize", fitHeadings);
@@ -570,7 +573,8 @@
           });
           // Alternate Loop1 / Loop2 across nav items
           var loopId = idx % 2 === 0 ? "loop1" : "loop2";
-          link.addEventListener("mouseenter", function () {
+          var navSoundEvent = window.friv.isTouch ? "click" : "mouseenter";
+          link.addEventListener(navSoundEvent, function () {
             if (window.frivSound) window.frivSound.playLoop(loopId);
           });
         });
