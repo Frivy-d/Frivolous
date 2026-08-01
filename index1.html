@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Frivolous Hub (Live) - the living work of Daniel Gardner</title>
+    <link rel="icon" type="image/svg+xml" href="soundon.svg" />
+    <meta
+      name="description"
+      content="Frivolous Live — Daniel Gardner. Live electronic music performance, DJ, micro house, minimal techno. Based in Berlin."
+    />
+    <meta
+      name="keywords"
+      content="Frivolous, Daniel Gardner, the living work of Daniel Gardner, electronic musician, live electronic music performance, DJ, micro house, minimal techno, experimental house, minimal groove, techno, organic house, psychedelic, Berlin"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="splash-edge-2-edge.js"></script>
+    <style>
+      @font-face {
+        font-family: "OneFont";
+        src: url("OneFont.otf") format("opentype");
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .page-title {
+        text-align: center;
+        font-family: "SpaceMono", monospace;
+        font-weight: normal;
+        font-size: 11px;
+        letter-spacing: 0.3px;
+        color: #999;
+        text-shadow: none;
+        text-transform: none;
+        padding: 8px 20px 0;
+        margin: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      html,
+      body {
+        width: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        background:
+          url("./images/charcoal-right.png") no-repeat right top / 40% auto,
+          url("./images/charcoal-right.png") no-repeat right bottom / 40% auto,
+          url("./images/inkblots_v3.png") no-repeat center top / 100% auto,
+          url("./images/inkblots_v3.png") no-repeat center bottom / 100% auto,
+          url("./images/foolscap_disintegrated.v3.png") no-repeat center top /
+            100% auto,
+          url("./images/foolscap_disintegrated.v3.png") no-repeat center
+            bottom / 100% auto,
+          #6d8196;
+        font-family: "SpaceMono", monospace;
+        color: #222;
+        line-height: 1.8;
+        padding: 0;
+      }
+      #content {
+        margin: auto;
+        max-width: 900px;
+        padding: 20px;
+        position: relative;
+        z-index: 2;
+      }
+      .section-heading {
+        font-family: "OneFont", "Courier Prime", Courier, monospace;
+        font-size: 5vw;
+        font-weight: bold;
+        color: #ff00ff;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        line-height: 1.4;
+        display: block;
+        white-space: nowrap;
+        text-align: center;
+        text-shadow:
+          0 0 7.6px rgba(255, 0, 255, 0.76),
+          0 0 15.2px rgba(255, 0, 255, 0.57),
+          0 0 22.8px rgba(255, 0, 255, 0.38),
+          -2px -2px 4px rgba(0, 0, 0, 0.5),
+          2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      .section-heading span {
+        display: inline-block;
+      }
+      .section-heading span:nth-child(3n + 1) {
+        transform: rotate(-8deg) translateY(4px);
+        font-size: 1.15em;
+      }
+      .section-heading span:nth-child(3n + 2) {
+        transform: rotate(5deg) translateY(-6px);
+      }
+      .section-heading span:nth-child(3n + 3) {
+        transform: rotate(-3deg) translateY(2px);
+      }
+      .section-heading span:nth-child(5n + 1) {
+        transform: rotate(10deg) translateY(-3px);
+      }
+      .section-heading span:nth-child(5n + 4) {
+        transform: rotate(-12deg) translateY(7px);
+        font-size: 1.15em;
+      }
+      .section-heading span:nth-child(7n) {
+        transform: rotate(7deg) translateY(-5px);
+      }
+      .section-heading span:nth-child(7n + 3) {
+        transform: rotate(-15deg) translateY(8px);
+        font-size: 1.15em;
+      }
+      .section-heading span:nth-child(11n + 2) {
+        transform: rotate(14deg) translateY(-4px);
+      }
+      .section-heading .space {
+        width: 12px;
+      }
+      p {
+        font-size: 16px;
+        line-height: 1.4;
+        color: #ff00ff;
+        font-weight: regular;
+        backdrop-filter: blur(10px);
+        background: rgba(15, 15, 15, 0.55);
+        display: inline;
+        padding: 4px 8px;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        margin-bottom: 12px;
+        border-radius: 2px;
+      }
+      p:nth-child(odd) {
+        padding-left: 18px;
+      }
+      p:nth-child(even) {
+        padding-left: 6px;
+        text-indent: 12px;
+      }
+      #toc {
+        margin-top: -45px;
+        text-align: center;
+        padding: 0px 20px 20px;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold;
+      }
+      #toc h2 {
+        font-family: "OneFont", "Courier Prime", Courier, monospace;
+        font-size: clamp(12px, 4.5vw, 30px);
+        font-weight: normal;
+        letter-spacing: -2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        color: #ff00ff;
+      }
+      #toc nav a {
+        display: block;
+        font-size: clamp(13px, 4vw, 26px);
+        letter-spacing: 1.5px;
+        text-transform: lowercase;
+        color: #ff00ff;
+        text-decoration: none;
+        margin: 5px 0;
+        transition: transform 0.2s ease;
+        text-shadow:
+          0 0 5.7px rgba(255, 0, 255, 0.67),
+          0 0 11.4px rgba(255, 0, 255, 0.48);
+      }
+      #toc nav a:first-child {
+        margin-top: 2.8em;
+      }
+      #toc nav a:hover {
+        transform: scale(1.25) rotate(15deg);
+      }
+      .section {
+        margin-top: 40px;
+      }
+      .right {
+        text-align: right;
+      }
+      .right p {
+        padding-right: 14px;
+        padding-left: 0;
+        text-indent: -8px;
+      }
+      footer {
+        text-align: center;
+        padding: 30px;
+        font-size: 12px;
+        color: #999;
+        background: rgba(17, 17, 17, 0.85);
+        margin-top: 60px;
+      }
+      #hero {
+        position: relative;
+        width: 100%;
+        background: #000;
+        overflow: hidden;
+      }
+      #animation_container {
+        margin: auto;
+        position: relative;
+        background-color: rgba(255, 255, 255, 1);
+        width: 614px;
+        height: 445px;
+        z-index: 1;
+      }
+      #canvas {
+        position: absolute;
+        display: block;
+        background-color: rgba(255, 255, 255, 1);
+      }
+      #animation_container::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2px;
+        height: 100%;
+        background: #000;
+        z-index: 2;
+      }
+      #dom_overlay_container {
+        pointer-events: none;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      #sound-toggle {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        z-index: 10;
+        cursor: pointer;
+        width: 46px;
+        height: 46px;
+        background: none;
+        border: none;
+        padding: 0;
+      }
+      #sound-toggle img {
+        width: 100%;
+        height: 100%;
+      }
+      #scroll-to-top {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        z-index: 10;
+        cursor: pointer;
+        width: 10vw;
+        height: 10vw;
+        background: none;
+        border: none;
+        padding: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+      #scroll-to-top.visible {
+        opacity: 0.7;
+        pointer-events: auto;
+        animation: bounceUp 0.5s ease-out;
+      }
+      @keyframes bounceUp {
+        0% {
+          transform: translateY(0);
+        }
+        40% {
+          transform: translateY(-15px);
+        }
+        70% {
+          transform: translateY(5px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+      #scroll-to-top.visible:hover {
+        opacity: 1;
+      }
+      #scroll-to-top img {
+        width: 100%;
+        height: 100%;
+      }
+      /* Add center background layers on phone only */
+      @media (max-width: 768px) {
+        body {
+          background:
+            url("./images/charcoalscribbles.v3.png") no-repeat right 20px top /
+              40% auto,
+            url("./images/charcoalscribbles.v3.png") no-repeat right 20px
+              center / 40% auto,
+            url("./images/charcoalscribbles.v3.png") no-repeat right 20px
+              bottom / 40% auto,
+            url("./images/inkblots_v3.png") no-repeat center top / 100% auto,
+            url("./images/inkblots_v3.png") no-repeat center center / 100% auto,
+            url("./images/inkblots_v3.png") no-repeat center bottom / 100% auto,
+            url("./images/foolscap_disintegrated.v3.png") no-repeat center top /
+              100% auto,
+            url("./images/foolscap_disintegrated.v3.png") no-repeat center
+              center / 100% auto,
+            url("./images/foolscap_disintegrated.v3.png") no-repeat center
+              bottom / 100% auto,
+            #6d8196;
+        }
+      }
+    </style>
+    <script>
+      var canvas,
+        stage,
+        exportRoot,
+        anim_container,
+        dom_overlay_container,
+        fnStartAnimation;
+      function init() {
+        console.log("init called");
+        canvas = document.getElementById("canvas");
+        console.log("canvas:", canvas);
+        anim_container = document.getElementById("animation_container");
+        dom_overlay_container = document.getElementById(
+          "dom_overlay_container",
+        );
+        console.log("AdobeAn:", typeof AdobeAn);
+        var comp = AdobeAn.getComposition("A2651A61BE074DB1BD51799916B9FBBD");
+        console.log("comp:", comp);
+        var lib = comp.getLibrary();
+        console.log("lib:", lib);
+        var loader = new createjs.LoadQueue(false);
+        loader.addEventListener("fileload", function (evt) {
+          handleFileLoad(evt, comp);
+        });
+        loader.addEventListener("complete", function (evt) {
+          handleComplete(evt, comp);
+        });
+        var lib = comp.getLibrary();
+        loader.loadManifest(lib.properties.manifest);
+      }
+      function handleFileLoad(evt, comp) {
+        var images = comp.getImages();
+        if (evt && evt.item.type == "image") {
+          images[evt.item.id] = evt.result;
+        }
+      }
+      function handleComplete(evt, comp) {
+        var lib = comp.getLibrary();
+        var ss = comp.getSpriteSheet();
+        var queue = evt.target;
+        var ssMetadata = lib.ssMetadata;
+        for (var i = 0; i < ssMetadata.length; i++) {
+          ss[ssMetadata[i].name] = new createjs.SpriteSheet({
+            images: [queue.getResult(ssMetadata[i].name)],
+            frames: ssMetadata[i].frames,
+          });
+        }
+        exportRoot = new lib.FixedActionScriptForAia_HTML5Canvas_Scene1();
+        stage = new lib.Stage(canvas);
+        stage.enableMouseOver(60);
+        fnStartAnimation = function () {
+          stage.addChild(exportRoot);
+          createjs.Ticker.framerate = lib.properties.fps;
+          createjs.Ticker.addEventListener("tick", stage);
+        };
+        AdobeAn.makeResponsive(false, "both", false, 1, [
+          canvas,
+          anim_container,
+          dom_overlay_container,
+        ]);
+        AdobeAn.compositionLoaded(lib.properties.id);
+        fnStartAnimation();
+        scaleHero();
+      }
+
+      function scaleHero() {
+        var cw = 614,
+          ch = 445;
+        var max_width = 860;
+        var hero = document.getElementById("hero");
+        var vw = hero.offsetWidth;
+        var ac = document.getElementById("animation_container");
+        var target_width = Math.min(vw, max_width);
+        var s = target_width / cw;
+        ac.style.transform = "scale(" + s + ")";
+        ac.style.transformOrigin = "center top";
+        ac.style.left = "50%";
+        ac.style.marginLeft = "-" + cw / 2 + "px";
+        hero.style.height = Math.floor(ch * s) + "px";
+      }
+      window.addEventListener("resize", scaleHero);
+
+      var soundOn = false;
+
+      // ── Tone.js Sound Manager ──
+      // All loops start simultaneously (muted). Hover unmutes one per group.
+      var frivSound = {
+        players: {},
+        groups: {
+          bg: ["bg1", "bg2"],
+          loop: ["loop1", "loop2"],
+        },
+        activeBG: null,
+        activeLoop: null,
+        ready: false,
+        playing: false,
+
+        init: function () {
+          var self = this;
+          this.players.bg1 = new Tone.Player({
+            url: "websounds/bg1-rf3.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.bg2 = new Tone.Player({
+            url: "websounds/BG2.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.loop1 = new Tone.Player({
+            url: "websounds/Loop1.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.loop2 = new Tone.Player({
+            url: "websounds/Loop2.mp3",
+            loop: true,
+          }).toDestination();
+
+          // Start all muted
+          Object.keys(this.players).forEach(function (key) {
+            self.players[key].mute = true;
+          });
+
+          Tone.loaded().then(function () {
+            self.ready = true;
+            console.log("[frivSound] All players loaded and ready");
+          });
+        },
+
+        // Start all loops simultaneously (called on first sound-on)
+        startAll: function () {
+          if (this.playing) return;
+          if (Tone.context.state !== "running") Tone.start();
+          var now = Tone.now();
+          Object.keys(this.players).forEach(
+            function (key) {
+              this.players[key].start(now);
+            }.bind(this),
+          );
+          this.playing = true;
+          console.log("[frivSound] startAll — all loops started at", now);
+        },
+
+        playBG: function (id) {
+          if (!window.soundOn || !this.ready) return;
+          if (this.activeBG === id) {
+            console.log("[frivSound] playBG skipped — already active:", id);
+            return;
+          }
+          if (!this.playing) this.startAll();
+          var self = this;
+          this.groups.bg.forEach(function (key) {
+            var muted = key !== id;
+            self.players[key].mute = muted;
+            console.log("[frivSound] BG", key, muted ? "MUTED" : "UNMUTED");
+          });
+          this.activeBG = id;
+          console.log("[frivSound] playBG → active:", id);
+        },
+
+        playLoop: function (id) {
+          if (!window.soundOn || !this.ready) return;
+          if (this.activeLoop === id) {
+            console.log("[frivSound] playLoop skipped — already active:", id);
+            return;
+          }
+          if (!this.playing) this.startAll();
+          var self = this;
+          this.groups.loop.forEach(function (key) {
+            var muted = key !== id;
+            self.players[key].mute = muted;
+            console.log("[frivSound] Loop", key, muted ? "MUTED" : "UNMUTED");
+          });
+          this.activeLoop = id;
+          console.log("[frivSound] playLoop → active:", id);
+        },
+
+        stopAllBG: function () {
+          var self = this;
+          this.groups.bg.forEach(function (key) {
+            self.players[key].mute = true;
+          });
+          this.activeBG = null;
+          console.log("[frivSound] stopAllBG — all BG muted");
+        },
+
+        stopAllLoop: function () {
+          var self = this;
+          this.groups.loop.forEach(function (key) {
+            self.players[key].mute = true;
+          });
+          this.activeLoop = null;
+          console.log("[frivSound] stopAllLoop — all loops muted");
+        },
+
+        stopAll: function () {
+          this.stopAllBG();
+          this.stopAllLoop();
+        },
+
+        // Mute everything and stop playback
+        shutdown: function () {
+          var self = this;
+          Object.keys(this.players).forEach(function (key) {
+            self.players[key].mute = true;
+            self.players[key].stop();
+          });
+          this.activeBG = null;
+          this.activeLoop = null;
+          this.playing = false;
+          console.log("[frivSound] shutdown — all stopped and muted");
+        },
+      };
+      window.frivSound = frivSound;
+      frivSound.init();
+
+      function toggleSound() {
+        soundOn = !soundOn;
+        var btn = document.getElementById("sound-icon");
+        btn.src = soundOn ? "soundon.svg" : "soundoff.svg";
+        console.log("[toggleSound] soundOn:", soundOn);
+        if (soundOn) {
+          Tone.start().then(function () {
+            console.log("[toggleSound] Tone context running");
+            if (window.frivSound && !window.frivSound.playing) {
+              window.frivSound.startAll();
+            }
+          });
+        } else if (window.frivSound) {
+          window.frivSound.shutdown();
+        }
+      }
+
+      // Resize headings to fill available width based on span count
+      function fitHeadings() {
+        var content = document.getElementById("content");
+        if (!content) return;
+        var available = Math.min(content.clientWidth, 900) * 0.88;
+        document
+          .querySelectorAll(".section-heading")
+          .forEach(function (heading) {
+            var letters = heading.querySelectorAll("span:not(.space)").length;
+            if (letters === 0) return;
+            heading.style.fontSize = Math.floor(available / letters) + "px";
+          });
+      }
+
+      window.friv = window.friv || {};
+      window.friv.isTouch = window.matchMedia("(pointer: coarse)").matches;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        fitHeadings();
+        window.addEventListener("resize", fitHeadings);
+
+        var links = document.querySelectorAll("#toc nav a");
+        links.forEach(function (link, idx) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            var target = document.querySelector(this.getAttribute("href"));
+            if (target) {
+              var offset = 20;
+              var top =
+                target.getBoundingClientRect().top +
+                window.pageYOffset -
+                offset;
+              window.scrollTo({ top: top, behavior: "smooth" });
+            }
+          });
+          // Alternate Loop1 / Loop2 across nav items
+          var loopId = idx % 2 === 0 ? "loop1" : "loop2";
+          var navSoundEvent = window.friv.isTouch ? "click" : "mouseenter";
+          link.addEventListener(navSoundEvent, function () {
+            if (window.frivSound) window.frivSound.playLoop(loopId);
+          });
+        });
+
+        var scrollToTopBtn = document.getElementById("scroll-to-top");
+        if (scrollToTopBtn) {
+          var lastScrollY = window.scrollY;
+          scrollToTopBtn.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+          var bounceTimer = null;
+          window.addEventListener("scroll", function () {
+            var currentY = window.scrollY;
+            if (currentY > 300) {
+              scrollToTopBtn.classList.add("visible");
+              if (currentY > lastScrollY && !bounceTimer) {
+                scrollToTopBtn.style.animation = "none";
+                scrollToTopBtn.offsetHeight;
+                scrollToTopBtn.style.animation = "bounceUp 0.5s ease-out";
+                bounceTimer = setTimeout(function () {
+                  bounceTimer = null;
+                }, 500);
+              }
+            } else {
+              scrollToTopBtn.classList.remove("visible");
+            }
+            lastScrollY = currentY;
+          });
+        }
+      });
+    </script>
+  </head>
+  <body onload="init()">
+    <section id="hero">
+      <div id="animation_container">
+        <canvas id="canvas" width="614" height="445"></canvas>
+        <div id="dom_overlay_container"></div>
+      </div>
+      <button id="sound-toggle" onclick="toggleSound()">
+        <img id="sound-icon" src="soundoff.svg" alt="Toggle Sound" />
+      </button>
+    </section>
+    <h1 class="page-title">
+      Frivolous, the living work of Daniel Gardner (Electronic Musician)
+      (Live electronic music performance, DJ, micro house, minimal techno,
+      Berlin)
+    </h1>
+    <button id="scroll-to-top">
+      <img src="toplog2.svg" alt="Scroll to top" />
+    </button>
+    <div id="content">
+      <div id="toc">
+        <nav>
+          <a href="#artist-statement">Artist Statement</a>
+          <a href="#history">History</a>
+          <a href="#new-releases">New Releases</a>
+          <a href="#live-performance">Live Performance</a>
+          <a href="#projects">Projects</a>
+        </nav>
+      </div>
+      <div class="section" id="artist-statement">
+        <h2 class="section-heading">
+          <span>A</span><span>R</span><span>T</span><span>I</span><span>S</span
+          ><span>T</span><span class="space"></span><span>S</span><span>T</span
+          ><span>A</span><span>T</span><span>E</span
+          ><span style="margin-left: 0px">M</span><span>E</span><span>N</span
+          ><span>T</span>
+        </h2>
+        <p></p>
+        <center>
+          <img
+            src="images/HiRes4_smaller.JPG"
+            alt="Frivolous in Berlin"
+            title="You can't take the Canadian out of the Berliner"
+            style="max-width: 100%; height: auto"
+          />
+        </center>
+        <p></p>
+        <p>
+          <br />
+          My goal for the project Frivolous is to keep a firm grip on my
+          innocent fascination with Electronic Music. To continue to engage a
+          naive spirit that communicates through the integration of
+          multi-contextual and multi-historical influences. Ideas of sound
+          re-contextualization (sampling and re-sampling) will be used to create
+          unorthodox and spell-bound narratives in new and unified sonic spatial
+          environments. Although the music can often be dance-able, the
+          intention is to provoke mystery and musical questions in the listener
+          as the work attempts to illuminate the playfulness and contradictions
+          of the human condition.
+        </p>
+      </div>
+      <div class="section left" id="history">
+        <h2 class="section-heading">
+          <span>H</span><span>I</span><span>S</span><span>T</span><span>O</span
+          ><span>R</span><span>Y</span>
+        </h2>
+        <p>
+          My name is Daniel Gardner. My main project is called Frivolous. I
+          participated in (and emerged from) the Canadian underground Electronic
+          Music scene under heavy influence from German Minimal House (Frankfurt
+          circa late-2000's) and the French and Québécois Mikrohouse movements.
+          Under the name <strong><i>Frivolous</i></strong> I compose original
+          Electronic music which has resulted in a substantial body of work
+          published by various independent labels around the world. Although you
+          will hear the 'Zeitgeist' of various genres and periods of music in my
+          work I try not to be bound to any Genre. I&nbsp;
+          <meta charset="utf-8" />
+          unapologetically borrow influences from cultures and styles throughout
+          history and weave them into a fluidly evolving work.<br />
+        </p>
+        <p><br /></p>
+        <p>
+          In addition to the Frivolous work I've produced music on a
+          commission-basis for podcasts and Radio-stations including
+          <strong>Deutschland-Radio, TwenFM</strong> and have worked on a
+          freelance basis at the
+          <strong>CBC (Canadian Broadcasting Company)</strong> in live-sound.
+          Performing this work live at selected special locations; Frivolous
+          (Live) has been featured at such renowned Festivals as
+          <strong>Montreux Jazz Festival</strong>, <strong>MUTEK</strong>,
+          <strong>Transmediale/CTM</strong> and
+          <strong>Amsterdam Dance Event</strong>. I currently have a studio in
+          Berlin where I continue to record original music, collaborate with
+          other artists and make remixes while also doing live sound capture for
+          independent films and sound-mixing (front of house) at the<em> </em
+          ><strong>Konzertreihe am Café Tasso</strong> in Berlin-Friedrichshain.
+        </p>
+        <p><br /></p>
+        <p><br /></p>
+        <p><br /></p>
+        
+      </div>
+      <div class="section" id="new-releases">
+        <h2 class="section-heading">
+          <span>N</span><span>E</span><span>W</span><span class="space"></span
+          ><span>R</span><span>E</span><span>L</span><span>E</span><span>A</span
+          ><span>S</span><span>E</span><span>S</span>
+        </h2>
+        <iframe
+          scrolling="no"
+          style="border: 0; width: 100%; height: 50px"
+          src="https://bandcamp.com/band_follow_button_deluxe/857421817"
+        ></iframe>
+        <p>
+          <b
+            ><a
+              href="https://www.discogs.com/artist/51765-Frivolous"
+              target="_blank"
+              >Almost (nearly) complete discography @ Discogs.com</a
+            ></b
+          >
+        </p>
+        <p>
+          <left>
+            <img
+              src="images/Meteorology2025.png"
+              alt="Meteorology 2025 Re-release"
+              title="Meteorology 2025 on Chippy Chasers"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2025 (Chippy Chasers)<br />
+          <a
+            href="https://chippychasers.bandcamp.com/album/meteorology-reissue"
+            target="_blank"
+            >Meteorology (Album re-release)</a
+          >
+          <br />
+          with Hits like "Wasting Time", "Allentown Jail" &amp; "Ostalgia"<br />
+          <br />
+          <left>
+            <img
+              src="images/whirligig.png"
+              alt="Mark_Slee-Whirlygig_Remix"
+              title="Mark Slee Whirlygig Frivolous Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          2025 (Manjumasi) Mark Slee<br />
+          <a href="https://link.manjumasi.com/whirligig" target="_blank"
+            >Whirligig (Frivolous Remix)</a
+          ><br />
+          <left>
+            <img
+              src="images/milos.png"
+              alt="Milosh_I_Feel_You_Remix"
+              title="Milosh_I_Feel_You_Frivolous_Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2025 (Leporelo)
+          <a
+            href="https://leporelo.bandcamp.com/track/i-feel-you-hear-that-mr-f-sound"
+            target="_blank"
+            >Milos - I Feel You (Hear That 'Mr. F' Sound)</a
+          ><br />
+          <left>
+            <img
+              src="images/wonder.png"
+              alt="The_Wonder_of_the_Feeler"
+              title="The_Wonder_of_the_Feeler"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2024 (self-release)
+          <a
+            href="https://the-real-frivolous.bandcamp.com/album/the-wonder-of-the-feeler-ep"
+            target="_blank"
+            ><br />
+            Frivolous - The Wonder of the Feeler</a
+          >
+          <br />
+          <left>
+            <img
+              src="images/janmir.png"
+              alt="Coffee_and_Cans.remix"
+              title="Coffee and Cans Frivolous Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2024 (URSL) Jan Mir, Paul Sandberg, Tomas Svensson<br />
+          <a
+            href="https://urslrecords.bandcamp.com/track/cans-coffee-frivolous-remix"
+            target="_blank"
+            >Cans &amp; Coffee (Frivolous Remix)</a
+          ><br />
+          <left>
+            <img
+              src="images/psycho.png"
+              alt="Psycho_Acoustic_Principles_For_The_Dancefloor"
+              title="Psycho_Acoustic_Principles_For_The_Dancefloor"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2023 (Compost Records) Frivolous<br />
+          <a
+            href="https://compostrecords.bandcamp.com/album/psycho-acoustic-principles-for-the-dancefloor-ep"
+            target="_blank"
+            >Psycho Acoustic Principles for the Dancefloor EP</a
+          ><br />
+          <left>
+            <img
+              src="images/weknow.png"
+              alt="We_Know_Major_Toms_a_Junkie"
+              title="Felix_Labande_We_Know_Major_Toms_a_Junkie_Frivolous_Remix"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2023 (Compost Records) Felix Labande<br />
+          <a
+            href="https://felixlaband.bandcamp.com/track/we-know-major-toms-a-junkie-frivolous-remix"
+            target="_blank"
+            >We Know Major Tom's A Junkie (Frivolous Remix)</a
+          ><br />
+          <left>
+            <img
+              src="images/the_tiny_house_of_delusion.png"
+              alt="The_Tiny_House_Of_Delusion"
+              title="The_Tiny_House_Of_Delusion"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2022 (Bar 25 Music) Frivolous <br />
+          <a
+            href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-bar25-176"
+            target="_blank"
+            >The Tiny House of Delusion (Album)</a
+          ><br />
+          <left>
+            <img
+              src="images/the_tiny_house_of_delusion.png"
+              alt="The_Tiny_House_Of_Delusion"
+              title="The_Tiny_House_Of_Delusion"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2022 (Bar 25 Music) Frivolous<br />
+          <a
+            href="https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179https://bar25music.bandcamp.com/album/frivolous-the-tiny-house-of-delusion-remixes-bar25-179"
+            target="_blank"
+            >The Tiny House of Delusion (Remixes)<br />
+          </a>
+
+          <left>
+            <img
+              src="images/Kermesse-Space_and_Time(Frivolous).jpg"
+              alt="Kermesse-Space_and_Time(Frivolous_Remix)"
+              title="Kermesse-Space_and_Time(Frivolous_Remix)"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2022 (LNDKHN) Kermesse / Landikhan<br />
+          <a
+            href="https://soundcloud.com/frivolous/kermesse-space-time-frivolous-remix"
+            target="_blank"
+            >Space &amp; Time (Frivolous Remix)</a
+          ><br />
+          <left>
+            <img
+              src="images/Release_Paralysis.png"
+              alt="Release_Paralysis_EP"
+              title="Frivolous_Release_Paralysis_EP"
+              style="max-width: 100%; height: auto"
+            />
+          </left>
+          <br />
+          2020 (Otake Records) <br />
+          <a
+            href="https://soundcloud.com/otakerecords/sets/frivolous-release-paralysis-otake-033"
+            target="_blank"
+            >Frivolous - Release Paralysis EP</a
+          >
+        </p>
+      </div>
+      <div class="section" id="live-performance">
+        <h2 class="section-heading">
+          <span>L</span><span>I</span><span>V</span><span>E</span
+          ><span class="space"></span><span>P</span><span>E</span><span>R</span
+          ><span>F</span><span>O</span><span>R</span><span>M</span><span>A</span
+          ><span>N</span><span>C</span><span>E</span>
+        </h2>
+        <p></p>
+        <center>
+          <img
+            src="images/Nation_of_Godwana.JPG"
+            alt="Frivolous LIVE at Nation of Godwana"
+            title="Frivolous Nation of Godwana"
+            style="max-width: 100%; height: auto"
+          />
+        </center>
+        <p></p>
+        <p>
+          <br />
+          Performance Ideology (&amp; Bookings): Frivolous is not an act which
+          is concerned by definitions of commercial visibility. Although some
+          live appearances have happened at notable venues around the world; my
+          focus remains to refine my performances to special and un-usual
+          events. My music pivots between dance-music and something designed for
+          the listener to discover in their own space. Considering that modern
+          'Club Culture', as it is today, is hard-pressed to provide such a
+          space for sonic discovery: Frivolous (Live) will appear in carefully
+          considered locations only. These include regional venues for dedicated
+          fans who do not have the chance to travel to urban areas, concept
+          events such as hidden stages at Festivals and Community-Projects where
+          sonic and performance explorations remain the primary focus. If you
+          have such an event planned and would like to invite Frivolous (Live)
+          please reach out to Ulrike Schmeisser uli@uliversum-booking.de
+        </p>
+        <p>Upcoming Performances: found on my Soundcloud page</p>
+        <p>
+          Note-worthy past performances of Frivolous live include: The Frisky
+          Whisker - Atlanta (GA), Montréal Jazz Festival, Sub-Sahara (SA),
+          Montreux Jazz Festival, CMYK - Boulder (CO), Vagabundos Ibiza,
+          Kazantip Festival, CTM/Club Transmediale, MUTEK Festival, Fusion
+          Festival, Awakenings/ADE, Miami Winter Music Conference, Panorama
+          Bar/Berghain, Fabric London, DAT Music Conference - Missoula (MT)
+        </p>
+      </div>
+      <div class="section" id="projects">
+        <h2 class="section-heading">
+          <span>P</span><span>R</span><span>O</span><span>J</span><span>E</span
+          ><span>C</span><span>T</span><span>S</span>
+        </h2>
+        <p>
+          <strong>Contraptions:</strong> — Adopting cutting-edge production and engineering
+          techniques; live performances under the name Frivolous have been
+          defined by my love of building and hacking weird machines. Examples of
+          hand-made instruments used in recordings and live performances
+          include: Robotic xylophones [Bild 1: setting PureData in play to
+          control complex mechanical systems], Bicycle-powered spring-reverb
+          unit with modulating reverb-coils [Bild 2], "The Knife"
+          contact-microphone knife-instrument [Bild 3], "Double-cable Tub Bass",
+          a "broken-ruler music box" and "The Telephone" singing &amp;
+          monitoring-system [Bild 4] simply called 'the Telephone' which is
+          still in use today.
+        </p><br>
+        <p><br>
+          <strong>Sound Engineering:</strong> <br> 
+          my excursion into
+          Sound-Engineering has mostly been unguided and unconventional. Perhaps
+          this is the reason for the unique sound of Frivolous over the years
+          (see section: <strong><em>New Releases</em></strong> for links to
+          newer and older work). My musical journey started with Classical
+          music studies at a
+          young age. I was enrolled at Royal Conservatory of Music where I
+          begrudgingly finished my Grade-8: including Music-Theory and History.
+          After many years of working and touring I finally completed an MA in
+          2020 in Creative Electronic Music Production at Catalyst Institute in
+          Berlin. This may sound like a strange order, but it offered me the
+          opportunity to do something possitive during the Pandemic and gave me
+          the chance to return to Europe after almost 10 years of living back in
+          Canada on an small island in the Pacific Northwest.<span
+            style="color: #222222">
+          </span>I also came to this MA program at Catalyst Institute with many
+          ideological demons in my closet - topics which I was growing ever-more
+          uncomfortable with in the landscape of modern music production:
+          especially as it played-out between 2008-2018. The Masters program
+          taught me how to conduct a Practice-Based Research approach to address the issues
+          academically. Luckily this gave me the tools to assert my possition: that the
+          tools being used to achieve perceptual LOUDNESS in recorded music was
+          also killing music's ability to model or reproduce
+          "reality-based" spatial sound signatures. After this I conducted a study
+          (more artistic than scientific) to determine if the music of this time
+          [which was becoming known to many as "the loudness war
+          period" of music] was not only evolving aesthetically but doing so in
+          direct conversation with the "reality" of acoustic spatial sound
+          design. <br> Playing with these ideas of reality or, at least, referencing
+          the human-being's experience; i asserted that common practices in "reality-based" sound-design had (up to around 2008)
+          been ubiquitous in sound recordings throughout almost
+          every genre including Electronic Music. After which time it seemed
+          engineers were placing less emphasis (consciously or unconsciously) on
+          spatial acoustic modeling of "reality" in favor of
+          fragmented or "hyper-reality" spatial dimensionality. This led me to an
+          inevitable question. 'Was the competition for loudness impeding music's ability to
+          convey the human-experience OR, perhaps in parallel, does a new sonic
+          "hyper-reality" allow listeners
+          <strong>to escape (rather than be reminded of) the reality of the current world state?'
+          </strong> (OH SHIT! that got DARK- but who said Academics aren't dark? I guess it's because they used to be musicians :-D)
+          <br /></p><br />
+        <p>
+          Let's set aside the darkness of this prospect! In my mind, Music is
+          meant to unite, transcend and maybe even iluminate the lightness of being which we often take for granded - proving - that I
+          possess a strong bias towards one of the two options. Can you tell
+          which one? (reality or hyper-reality based sound design?) I guess my
+          listeners can try to determine this answer for themselves.
+        </p>
+      </div>
+    </div>
+    <footer>© 2026 Frivolous</footer>
+  </body>
+</html>
