@@ -412,8 +412,8 @@
       var frivSound = {
         players: {},
         groups: {
-          bg: ["bg1", "bg2"],
-          loop: ["loop1", "loop2"],
+          bg: ["bg1", "bg2", "bg3"],
+          loop: ["loop1", "loop2", "loop3"],
         },
         activeBG: null,
         activeLoop: null,
@@ -430,12 +430,20 @@
             url: "websounds/BG2.mp3",
             loop: true,
           }).toDestination();
+          this.players.bg3 = new Tone.Player({
+            url: "websounds/BG3.mp3",
+            loop: true,
+          }).toDestination();
           this.players.loop1 = new Tone.Player({
             url: "websounds/Loop1.mp3",
             loop: true,
           }).toDestination();
           this.players.loop2 = new Tone.Player({
             url: "websounds/Loop2.mp3",
+            loop: true,
+          }).toDestination();
+          this.players.loop3 = new Tone.Player({
+            url: "websounds/Loop3.mp3",
             loop: true,
           }).toDestination();
 
@@ -589,8 +597,9 @@
               window.scrollTo({ top: top, behavior: "smooth" });
             }
           });
-          // Alternate Loop1 / Loop2 across nav items
-          var loopId = idx % 2 === 0 ? "loop1" : "loop2";
+          // Alternate Loop1 / Loop2 / Loop3 across nav items
+          var loopId =
+            idx % 3 === 0 ? "loop1" : idx % 3 === 1 ? "loop2" : "loop3";
           var navSoundEvent = window.friv.isTouch ? "click" : "mouseenter";
           link.addEventListener(navSoundEvent, function () {
             if (window.frivSound) window.frivSound.playLoop(loopId);
@@ -724,7 +733,6 @@
         <p><br /></p>
         <p><br /></p>
         <p><br /></p>
-        
       </div>
       <div class="section" id="new-releases">
         <h2 class="section-heading">
@@ -965,26 +973,27 @@
           ><span>C</span><span>T</span><span>S</span>
         </h2>
         <p>
-          <strong>Contraptions:</strong> — Adopting cutting-edge production and engineering
-          techniques; live performances under the name Frivolous have been
-          defined by my love of building and hacking weird machines. Examples of
-          hand-made instruments used in recordings and live performances
-          include: Robotic xylophones [Bild 1: setting PureData in play to
-          control complex mechanical systems], Bicycle-powered spring-reverb
-          unit with modulating reverb-coils [Bild 2], "The Knife"
+          <strong>Contraptions:</strong> — Adopting cutting-edge production and
+          engineering techniques; live performances under the name Frivolous
+          have been defined by my love of building and hacking weird machines.
+          Examples of hand-made instruments used in recordings and live
+          performances include: Robotic xylophones [Bild 1: setting PureData in
+          play to control complex mechanical systems], Bicycle-powered
+          spring-reverb unit with modulating reverb-coils [Bild 2], "The Knife"
           contact-microphone knife-instrument [Bild 3], "Double-cable Tub Bass",
           a "broken-ruler music box" and "The Telephone" singing &amp;
           monitoring-system [Bild 4] simply called 'the Telephone' which is
           still in use today.
-        </p><br>
-        <p><br>
-          <strong>Sound Engineering:</strong> <br> 
-          my excursion into
-          Sound-Engineering has mostly been unguided and unconventional. Perhaps
-          this is the reason for the unique sound of Frivolous over the years
-          (see section: <strong><em>New Releases</em></strong> for links to
-          newer and older work). My musical journey started with Classical
-          music studies at a
+        </p>
+        <br />
+        <p>
+          <br />
+          <strong>Sound Engineering:</strong> <br />
+          my excursion into Sound-Engineering has mostly been unguided and
+          unconventional. Perhaps this is the reason for the unique sound of
+          Frivolous over the years (see section:
+          <strong><em>New Releases</em></strong> for links to newer and older
+          work). My musical journey started with Classical music studies at a
           young age. I was enrolled at Royal Conservatory of Music where I
           begrudgingly finished my Grade-8: including Music-Theory and History.
           After many years of working and touring I finally completed an MA in
@@ -993,42 +1002,55 @@
           opportunity to do something possitive during the Pandemic and gave me
           the chance to return to Europe after almost 10 years of living back in
           Canada on an small island in the Pacific Northwest.<span
-            style="color: #222222">
-          </span>I also came to this MA program at Catalyst Institute with many
+            style="color: #222222"
+          >
+          </span
+          >I also came to this MA program at Catalyst Institute with many
           ideological demons in my closet - topics which I was growing ever-more
           uncomfortable with in the landscape of modern music production:
           especially as it played-out between 2008-2018. The Masters program
-          taught me how to conduct a Practice-Based Research approach to address the issues
-          academically. Luckily this gave me the tools to assert my possition: that the
-          tools being used to achieve perceptual LOUDNESS in recorded music was
-          also killing music's ability to model or reproduce
-          "reality-based" spatial sound signatures. After this I conducted a study
-          (more artistic than scientific) to determine if the music of this time
-          [which was becoming known to many as "the loudness war
+          taught me how to conduct a Practice-Based Research approach to address
+          the issues academically. Luckily this gave me the tools to assert my
+          possition: that the tools being used to achieve perceptual LOUDNESS in
+          recorded music was also killing music's ability to model or reproduce
+          "reality-based" spatial sound signatures. After this I conducted a
+          study (more artistic than scientific) to determine if the music of
+          this time [which was becoming known to many as "the loudness war
           period" of music] was not only evolving aesthetically but doing so in
           direct conversation with the "reality" of acoustic spatial sound
-          design. <br> Playing with these ideas of reality or, at least, referencing
-          the human-being's experience; i asserted that common practices in "reality-based" sound-design had (up to around 2008)
-          been ubiquitous in sound recordings throughout almost
-          every genre including Electronic Music. After which time it seemed
-          engineers were placing less emphasis (consciously or unconsciously) on
-          spatial acoustic modeling of "reality" in favor of
-          fragmented or "hyper-reality" spatial dimensionality. This led me to an
-          inevitable question. 'Was the competition for loudness impeding music's ability to
-          convey the human-experience OR, perhaps in parallel, does a new sonic
+          design. <br />
+          Playing with these ideas of reality or, at least, referencing the
+          human-being's experience; i asserted that common practices in
+          "reality-based" sound-design had (up to around 2008) been ubiquitous
+          in sound recordings throughout almost every genre including Electronic
+          Music. After which time it seemed engineers were placing less emphasis
+          (consciously or unconsciously) on spatial acoustic modeling of
+          "reality" in favor of fragmented or "hyper-reality" spatial
+          dimensionality. This led me to an inevitable question. 'Was the
+          competition for loudness impeding music's ability to convey the
+          human-experience OR, perhaps in parallel, does a new sonic
           "hyper-reality" allow listeners
-          <strong>to escape (rather than be reminded of) the reality of the current world state?'
-          </strong> (OH SHIT! that got DARK- but who said Academics aren't dark? I guess it's because they used to be musicians :-D)
-          <br /></p><br />
+          <strong
+            >to escape (rather than be reminded of) the reality of the current
+            world state?'
+          </strong>
+          (OH SHIT! that got DARK- but who said Academics aren't dark? I guess
+          it's because they used to be musicians :-D) <br />
+        </p>
+        <br />
         <p>
           Let's set aside the darkness of this prospect! In my mind, Music is
-          meant to unite, transcend and maybe even iluminate the lightness of being which we often take for granded - proving - that I
-          possess a strong bias towards one of the two options. Can you tell
-          which one? (reality or hyper-reality based sound design?) I guess my
-          listeners can try to determine this answer for themselves.
+          meant to unite, transcend and maybe even iluminate the lightness of
+          being which we often take for granded - proving - that I possess a
+          strong bias towards one of the two options. Can you tell which one?
+          (reality or hyper-reality based sound design?) I guess my listeners
+          can try to determine this answer for themselves.
         </p>
       </div>
     </div>
-    <footer>© 2026 Frivolous</footer>
+    <footer>
+      © 2026 Frivolous —
+      <a href="mailto:Compressorhead@gmail.com">Compressorhead@gmail.com</a>
+    </footer>
   </body>
 </html>
