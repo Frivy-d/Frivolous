@@ -16523,7 +16523,7 @@
     var overlayButtons = [
       { inst: this.instance, bg: "bg1", name: "bat_house" },
       { inst: this.instance_1, bg: "bg1", name: "roses" },
-      { inst: this.instance_3, bg: "bg2", name: "bubblebath" },
+      { inst: this.instance_3, bg: "bg3", name: "bubblebath" },
       { inst: this.instance_4, bg: "bg2", name: "parascope" },
       { inst: this.instance_5, bg: "bg1", name: "house_btn" },
     ];
